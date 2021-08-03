@@ -28,8 +28,13 @@ function App() {
             <Sidebar />
             <Items />
           </Route>
-          <Route exact path="/:id">
+          <Route exact path="/:itemid">
+            <Navbar />
             <Item />
+          </Route>
+          <Route exact path="/:userid">
+            <Navbar />
+            <Profile />
           </Route>
         </Switch>
       </Router>

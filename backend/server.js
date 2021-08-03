@@ -10,7 +10,7 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
-  //the fixe for the deprecation warning
+  //the fix for the deprecation warning
   useCreateIndex: true
   }).then(() => console.log('Connected to database')) 
 
