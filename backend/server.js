@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const passport = require('passport')
 const cors = require('cors');
 require('dotenv').config();
 const routes = require('./routes.js')
@@ -8,7 +9,7 @@ const routes = require('./routes.js')
 const app = express();
 
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded())
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(
   cors({
@@ -25,7 +26,15 @@ mongoose.connect(process.env.MONGO_URI, {
   useCreateIndex: true
   }).then(() => console.log('Connected to database')) 
 
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+// require('./auth.js')(passport);
+// app.use(passport.initialize());
+
 require('./auth.js')
+
 
 const port = process.env.PORT || 5000;
 

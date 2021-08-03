@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
-const Bid = require('./bid.js');
+// const Bid = require('./bid.js');
+
+const bidSchema = new mongoose.Schema({
+  bidder: String,
+  bid: String
+}, {timestamps:true});
 
 const itemSchema = new mongoose.Schema({
   image: String,
@@ -7,7 +12,7 @@ const itemSchema = new mongoose.Schema({
   description: String,
   buyout: String,
   isBid: {type: Boolean, default: false, index:true},
-  bids: [Bid]
+  bids: [bidSchema]
 }, {timestamps: true});
 
 itemSchema.index({createdAt: 1}, {expireAfterSeconds: 24*60*60,partialFilterExpression : {isBid: false}})

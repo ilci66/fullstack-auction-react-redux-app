@@ -6,6 +6,7 @@ const ExtractJWT = require('passport-jwt').ExtractJWT;
 
 const User = require('./models/user');
 
+//feels unnecessary but will keep using for this project
 passport.use(
   'signup',
   new localStrategy(
@@ -15,6 +16,7 @@ passport.use(
       passwordField: 'password'
     }, 
     async (username, email, password, done) => {
+      console.log('auth sign up')
       try{
         const data = await User.findOne({username: username}).exec();
         if(data) return done(null, false, 'username taken')
