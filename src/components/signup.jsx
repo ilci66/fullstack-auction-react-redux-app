@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import isEmpty from 'is-empty';
 import validator from 'validator';
+import axios from 'axios'
 
 const Signup = () => {
   const [ username, setUsername ] = useState("");
@@ -18,7 +19,15 @@ const Signup = () => {
     }else if(password !== password2){
       return alert('Passwords are not matching')
     }
-
+    axios.post("http://localhost:5000/signup",  
+      {
+        username: username,
+        email: email,
+        password: password
+      },
+      {withCredentials: true})
+        .then(res => console.log(res))
+        .catch(error => console.log(error))
 
   }
 
