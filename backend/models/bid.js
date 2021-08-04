@@ -1,3 +1,5 @@
+//decided to include it in the item model 
+//keeping this as a reminder to myself
 // const mongoose = require('mongoose');
 
 // const bidSchema = new mongoose.Schema({
