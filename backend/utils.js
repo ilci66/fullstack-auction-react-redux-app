@@ -10,8 +10,10 @@ const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
 // console.log(PRIV_KEY)
 
 //helper functions
-const validPassword = (password, hash) => {
-  //compare password with hashed from database
+const validPassword = async (plaintTextPassword, hash) => {
+  const valid = await bcrypt.compare(plaintTextPassword, hash)
+  console.log("is password valid", valid)
+  return valid
 };
 
 const genPassword = async (plaintextPassword) => {
