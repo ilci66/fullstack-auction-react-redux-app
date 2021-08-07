@@ -8,13 +8,19 @@ const routes = require('./routes.js')
 
 const app = express();
 
+// test if this is actually necessary
+// require('./config/passport')(passport);
+
+app.use(passport.initialize());
+
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(
   cors({
-    origin:"http://localhost:3000",
-    credentials: true,
+    // commented for now
+    // origin:"http://localhost:3000",
+    // credentials: true,
   })
 );
 
@@ -28,12 +34,8 @@ mongoose.connect(process.env.MONGO_URI, {
 
 
 
-app.use(passport.initialize());
-app.use(passport.session());
-// require('./auth.js')(passport);
-// app.use(passport.initialize());
 
-require('./auth.js')
+// require('./auth.js')
 
 
 const port = process.env.PORT || 5000;

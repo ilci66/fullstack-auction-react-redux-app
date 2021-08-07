@@ -11,6 +11,9 @@ router.get('/items', (req, res) => {
   
 })
 
+router.get('/profile', (req, res) => {
+  res.send('Reached a protected route')
+})
 
 router.post('/signup', (req, res) => {
   console.log('sign up backend')
