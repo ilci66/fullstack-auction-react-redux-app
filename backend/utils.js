@@ -13,13 +13,18 @@ const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
 
 //helper functions
 
-const isNotEmpty = (username, email, password) => {
+const isNotEmptyRegister = (username, email, password) => {
   if(empty(username) || empty(email) || empty(password)){
     return false
   }
   return true;
 }
-
+const isNotEmptyLogin = (username, password) => {
+  if(empty(username) || empty(password)){
+    return false
+  }
+  return true;
+}
 const isEmailValid = (email) => {
   return validator.isEmail(email)
 };
@@ -55,7 +60,8 @@ const issueJWT = (user) => {
 }
 
 module.exports.isEmailValid = isEmailValid;
-module.exports.isNotEmpty = isNotEmpty;
+module.exports.isNotEmptyRegister = isNotEmptyRegister;
+module.exports.isNotEmptyLogin = isNotEmptyLogin;
 module.exports.validPassword = validPassword;
 module.exports.genPassword = genPassword;
 module.exports.issueJWT = issueJWT;

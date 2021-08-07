@@ -9,7 +9,7 @@ const routes = require('./routes.js')
 const app = express();
 
 // test if this is actually necessary
-// require('./config/passport')(passport);
+require('./config/passport')(passport);
 
 app.use(passport.initialize());
 
