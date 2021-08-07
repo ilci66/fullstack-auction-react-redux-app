@@ -32,54 +32,61 @@ const Signup = () => {
   }
 
   return (
-    <div>
-      <h1>Signup Component</h1>
+    <div >
+      <header>
+        
+      <h1>Sign Up</h1>
+      </header>
       <div id="signup-form-container">
-        <div className="form-group">
+        <div className="form-group" className="form-group w-50 mx-auto mt-4 mb-2">
           <label htmlFor="username">Username</label>
           <input
             name="username"
             type="text"
             id="username"
+            className="form-control"
             required
             onChange={(e) => setUsername(e.target.value)}
           >
           </input>
         </div>
-        <div className="form-group">
+        <div className="form-group" className="form-group w-50 mx-auto mt-4 mb-2">
           <label htmlFor="email">Email</label>
           <input
             name="email"
             type="text"
             id="email"
+            className="form-control"
             required
             onChange={(e) => setEmail(e.target.value)}
           >
           </input>
         </div>
-        <div className="form-group">
+        <div className="form-group" className="form-group w-50 mx-auto mt-4 mb-2">
           <label htmlFor="password">Password</label>
           <input
             name="password"
             type="password"
             id="password"
+            className="form-control"
             required
             onChange={(e) => setPassword(e.target.value)}
           >
           </input>
         </div>
-        <div className="form-group">
+        <div className="form-group" className="form-group w-50 mx-auto mt-4 mb-2">
           <label htmlFor="password2">Rewrite Password</label>
           <input
             name="password2"
             type="password"
             id="password2"
+            className="form-control"
             required
             onChange={(e) => setPassword2(e.target.value)}
           >
           </input>
         </div>
-        <button onClick={handleSignup}>Sign Up</button>
+        <button type ="button" className="btn btn-outline-primary" onClick={handleSignup}>Sign Up</button>
       </div>
     </div>
   )
