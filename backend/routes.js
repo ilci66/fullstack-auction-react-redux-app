@@ -18,6 +18,15 @@ router.get('/profile', (req, res) => {
 router.post('/register', (req, res) => {
   console.log('req. body info', req.body)
   const { username, password, email } = req.body;
+
+  if(!utils.isNotEmpty(username, email, password)){
+    res.status(400).json({ error: "missing required fields" })
+    return;
+  };
+  if(!utils.isEmailValid(email)){
+    res.status(400).json({ error: "email is invalid"})
+    return;
+  };
   
   User.findOne({ username: username }, async (err, data) => {
     if(err){

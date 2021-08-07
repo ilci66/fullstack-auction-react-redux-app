@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
+const validator = require('validator');
+const empty = require('is-empty');
 
 //Necessary for issuing the jwt
 const pathToKey = path.join(__dirname, 'id_rsa_priv.pem')
@@ -10,6 +12,18 @@ const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
 // console.log(PRIV_KEY)
 
 //helper functions
+
+const isNotEmpty = (username, email, password) => {
+  if(empty(username) || empty(email) || empty(password)){
+    return false
+  }
+  return true;
+}
+
+const isEmailValid = (email) => {
+  return validator.isEmail(email)
+};
+
 const validPassword = async (plaintTextPassword, hash) => {
   const valid = await bcrypt.compare(plaintTextPassword, hash)
   console.log("is password valid", valid)
@@ -40,6 +54,8 @@ const issueJWT = (user) => {
   //that simple
 }
 
+module.exports.isEmailValid = isEmailValid;
+module.exports.isNotEmpty = isNotEmpty;
 module.exports.validPassword = validPassword;
 module.exports.genPassword = genPassword;
 module.exports.issueJWT = issueJWT;
