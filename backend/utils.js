@@ -29,7 +29,7 @@ const issueJWT = (user) => {
 
   const payload = {
     sub: _id,
-    iat: Date.now
+    iat: Date.now()
   };
   const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, { expiresIn: expiresIn, algorithm: 'RS256' });
 
