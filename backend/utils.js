@@ -14,12 +14,28 @@ const validPassword = (password, hash) => {
   //compare password with hashed from database
 };
 
-const genPassword = () => {
-  //generete the password to save in the database
+const genPassword = async (plaintextPassword) => {
+  const saltRounds = 10;
+  const hash = await bcrypt.hash(plaintextPassword, saltRounds)
+  // console.log(hash)
+  return hash
 };
 
 const issueJWT = (user) => {
-  //well issue jwt :)
+  const _id = user._id;
+  const expiresIn = '1d';
+
+  const payload = {
+    sub: _id,
+    iat: Date.now
+  };
+  const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, { expiresIn: expiresIn, algorithm: 'RS256' });
+
+  return {
+    token: "Bearer " + signedToken,
+    expires: expiresIn
+  }
+  //that simple
 }
 
 module.exports.validPassword = validPassword;
