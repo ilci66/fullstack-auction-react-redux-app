@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
 
 //keep the in src
 import Items from './components/items/items'
@@ -13,6 +13,8 @@ import Sidebar from './components/sidebar';
 import './App.css';
 
 function App() {
+  // let match = useRouteMatch("/users/:username")
+  // console.log(match)
   return (
     <div className="App">
       <Router>
@@ -28,11 +30,11 @@ function App() {
             <Sidebar />
             <Items />
           </Route>
-          <Route exact path="/:itemid">
+          <Route path="/items/:itemid">
             <Navbar />
             <Item />
           </Route>
-          <Route exact path="/:username">
+          <Route path="/users/:username">
             <Navbar />
             <Profile />
           </Route>
