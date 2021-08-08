@@ -32,7 +32,7 @@ function App() {
             <Navbar />
             <Item />
           </Route>
-          <Route exact path="/:userid">
+          <Route exact path="/:username">
             <Navbar />
             <Profile />
           </Route>

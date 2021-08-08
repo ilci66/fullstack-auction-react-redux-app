@@ -1,9 +1,68 @@
-import React from 'react'
+import React, { useState } from 'react';
+import axios from 'axios';
+import * as moment from "moment";
 
 const Login = () => {
+  const [ username, setUsername ] = useState("");
+  const [ password, setPassword ] = useState("");
+  
+  const handleLogin = () => {
+    console.log(username, password);
+    axios.post(
+      "http://localhost:5000/login",
+      { username, password },
+      {withCredentials: true}
+    )
+    .then(async (res) => {
+      console.log("res >>", res.data)
+      const { expiresIn } = await res.data;
+      const { token } = await res.data
+      localStorage.removeItem("id_token");
+      localStorage.removeItem("expires_at");
+      const expiresAt = moment().add(Number.parseInt(expiresIn), 'days');
+      localStorage.setItem('id_token', token);
+      localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()) );
+
+    })
+    .catch(error => {
+      console.log(error.response.data.error)
+      alert(error.response.data.error)
+    })
+
+  }
+
   return (
     <div>
-      Login Component
+      <header>
+      <h1>Login</h1>
+      </header>
+        <div id="login-form-container">
+          <div className="form-group" className="form-group w-50 mx-auto mt-4 mb-2">
+            <label htmlFor="username">Username</label>
+            <input
+              name="username"
+              type="text"
+              id="username"
+              className="form-control"
+              required
+              onChange={(e) => setUsername(e.target.value)}
+            >
+            </input>
+          </div>
+          <div className="form-group" className="form-group w-50 mx-auto mt-4 mb-2">
+          <label htmlFor="password">Email</label>
+          <input
+            name="password"
+            type="password"
+            id="passwor"
+            className="form-control"
+            required
+            onChange={(e) => setPassword(e.target.value)}
+          >
+          </input>
+        </div>
+        <button type ="button" className="btn btn-outline-primary" onClick={handleLogin}>Login</button>
+      </div>
     </div>
   )
 }

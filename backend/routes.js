@@ -19,21 +19,28 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), (req, r
 
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
+  console.log("login attempt", username, password)
 
   if(!utils.isNotEmptyLogin(username, password)){
+    console.log("missing fileds")
     res.status(400).json({ error: "missing required fields" })
     return;
   }
   User.findOne({ username: username}, async (err, user) => {
     if(err){
+      console.log("database error")
       return res.status(400).json({ success: false, error: `an error occured: ${err}`})
     } else if(!user) {
-      return res.status(404).json({ success: false, error: "unknown username"})
+      console.log("no user in database")
+      return res.status(400).json({ success: false, error: "unknown username"})
     } else {
+      console.log("found the user")
       const isValid = await utils.validPassword(password, user.password)
       if(!isValid){
+        console.log("incorrect password")
         return res.status(400).json({ success: false, error: "incorrect password"})
       } else {
+        console.log("everything right sending token")
         const tokenObj = utils.issueJWT(user)
         res.status(200).json({ success: true, token: tokenObj.token, expiresIn: tokenObj.expires });
       }

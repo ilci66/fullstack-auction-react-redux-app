@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import isEmpty from 'is-empty';
 import validator from 'validator';
 import axios from 'axios'
+import * as moment from "moment";
 
 const Signup = () => {
   const [ username, setUsername ] = useState("");
@@ -19,22 +20,31 @@ const Signup = () => {
     }else if(password !== password2){
       return alert('Passwords are not matching')
     }
-    axios.post("http://localhost:5000/signup",  
+    axios.post("http://localhost:5000/register",  
       {
         username: username,
         email: email,
         password: password
       },
       {withCredentials: true})
-        .then(res => console.log(res))
-        .catch(error => console.log(error))
-
+        .then(async (res) => {
+          console.log("res >>", res.data)
+          const { expiresIn } = await res.data;
+          const { token } = await res.data
+          localStorage.removeItem("id_token");
+          localStorage.removeItem("expires_at");
+          const expiresAt = moment().add(Number.parseInt(expiresIn), 'days');
+          localStorage.setItem('id_token', token);
+          localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()) );
+        })
+        .catch(error => {
+          console.log(error.response.data.error);
+          alert(error.response.data.error);
+        })
   }
-
   return (
     <div >
       <header>
-        
       <h1>Sign Up</h1>
       </header>
       <div id="signup-form-container">
