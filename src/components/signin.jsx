@@ -34,7 +34,7 @@ const Login = () => {
   return (
     <div>
       <header>
-      <h1>Login</h1>
+      <h1>Sign In</h1>
       </header>
         <div id="login-form-container">
           <div className="form-group" className="form-group w-50 mx-auto mt-4 mb-2">

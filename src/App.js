@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Switch, Route, useRouteMatch, useParams } from
 //keep the in src
 import Items from './components/items/items'
 import Item from './components/items/item/item';
-import Login from './components/login';
+import Signin from './components/signin';
 import Signup from './components/signup';
-import Navbar from './components/navbar';
+import NavBar from './components/navbar';
 import Profile from './components/profile';
 import Sidebar from './components/sidebar';
 
@@ -22,20 +22,20 @@ function App() {
           <Route exact path ='/signup'>
             <Signup />
           </Route>
-          <Route exact path='/login'>
-            <Login />
+          <Route exact path='/signin'>
+            <Signin />
           </Route>
           <Route exact path='/'>
-            <Navbar />
+            <NavBar />
             <Sidebar />
             <Items />
           </Route>
           <Route path="/items/:itemid">
-            <Navbar />
+            <NavBar />
             <Item />
           </Route>
           <Route exact path="/profile">
-            <Navbar />
+            <NavBar />
             <Profile />
           </Route>
         </Switch>
