@@ -10,6 +10,20 @@ const utils = require('./utils')
 router.get('/items', (req, res) => {
   
 })
+router.post('/item/create', passport.authenticate('jwt', { session: false }), (req, res) => {
+
+})
+
+
+router.post('item/edit', passport.authenticate('jwt', { session: false }), (req, res) => {
+
+})
+
+router.get('/item/bid', passport.authenticate('jwt', { session: false }), (req, res) => {
+  
+})
+
+
 
 router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
   console.log("this is the req.user>>>>", req.user)

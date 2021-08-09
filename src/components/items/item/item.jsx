@@ -1,8 +1,12 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 
 const Item = () => {
+
   return(
-    <div>Item Component</div>
+    <div>
+      this is a detailed look, bidding and buyouts
+    </div>
   )
 };
 

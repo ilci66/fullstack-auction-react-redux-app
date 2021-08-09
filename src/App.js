@@ -8,6 +8,8 @@ import Signup from './components/signup';
 import NavBar from './components/navbar';
 import Profile from './components/profile';
 import Sidebar from './components/sidebar';
+import Home from './components/home'
+import ItemCreator from './components/items/item/itemcreator'
 
 
 import './App.css';
@@ -26,17 +28,16 @@ function App() {
             <Signin />
           </Route>
           <Route exact path='/'>
-            <NavBar />
-            <Sidebar />
-            <Items />
+            <Home />
           </Route>
           <Route path="/items/:itemid">
             <NavBar />
             <Item />
           </Route>
-          <Route exact path="/profile">
+          <Route exact path="/edit-create">
             <NavBar />
             <Profile />
+            <ItemCreator />
           </Route>
         </Switch>
       </Router>

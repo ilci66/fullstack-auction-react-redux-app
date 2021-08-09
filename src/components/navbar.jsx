@@ -11,16 +11,16 @@ const NavBar = () => {
       <div className="row">
         <div className=" d-flex flex-column">
           <Navbar className="justify-content-around mb-5"  expand="md" sticky="top">
-              <Navbar.Brand href="/" className="mx-3 p-2">HOME</Navbar.Brand>
-              <Navbar.Toggle aria-controls="basic-navbar-nav" className="mr-5 justify-content-around"/>
-              <Navbar.Collapse id="basic-navbar-nav" className="mr-5 justify-content-end mx-auto">
-                  <Nav className="p-2">
-                  <Nav.Link className="m-1" href="/signup">Sign Up</Nav.Link>
-                  <Nav.Link className="m-1" href="/signin">Sign Ip</Nav.Link>
-                  <Nav.Link className="m-1" href="/profile">View Your Profile</Nav.Link>
-                  <Button className="m-1" variant="secondary" onClick={handleLogout}>Log Out</Button>
-                  </Nav>
-              </Navbar.Collapse>
+            <Navbar.Brand href="/" className="mx-3 p-2">HOME</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" className="mr-5 justify-content-around"/>
+            <Navbar.Collapse id="basic-navbar-nav" className="mr-5 justify-content-end mx-auto">
+              <Nav className="p-2">
+              <Nav.Link className="m-1" href="/signup">Sign Up</Nav.Link>
+              <Nav.Link className="m-1" href="/signin">Sign Ip</Nav.Link>
+              <Nav.Link className="m-1" href="/edit-create">Create & Edit</Nav.Link>
+              {/* <Button className="m-1" variant="secondary" onClick={handleLogout}>Log Out</Button> */}
+              </Nav>
+            </Navbar.Collapse>
           </Navbar>
         </div>
       </div>
