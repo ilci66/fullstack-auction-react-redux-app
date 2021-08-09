@@ -34,7 +34,7 @@ function App() {
             <Navbar />
             <Item />
           </Route>
-          <Route path="/users/:username">
+          <Route exact path="/profile">
             <Navbar />
             <Profile />
           </Route>

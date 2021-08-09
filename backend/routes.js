@@ -12,9 +12,13 @@ router.get('/items', (req, res) => {
 })
 
 router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
-  console.log(req.user)
-  return res.status(200).send('Reached a protected route')
-
+  console.log("this is the req.user>>>>", req.user)
+  return res.status(200).json({ 
+    success: true,
+    username: req.user.username,
+    email: req.user.email,
+    createdAt: req.user.createdAt,
+  })
 })
 
 router.post('/login', (req, res) => {
