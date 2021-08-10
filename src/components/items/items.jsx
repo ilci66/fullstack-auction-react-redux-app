@@ -21,7 +21,7 @@ const Items = () => {
   return(
 
     <div>
-      <Form inline>
+      <Form inline className="w-50 mx-auto">
         <FormControl type="text"  placeholder="Search" onChange={handleSearch} className="mb-3 text-center w-30"/>
       </Form>
       <Container>

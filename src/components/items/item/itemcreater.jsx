@@ -63,8 +63,8 @@ const ItemCreater = () => {
   
   return(
     <div>
-    <h2>Create new Items </h2>
-    <form onSubmit={handleCreate}>
+    <h2>Create New Items </h2>
+    <form className="w-50 mx-auto mt-4" onSubmit={handleCreate}>
     <div className="form-group mb-1">
         <input 
           type="file" 

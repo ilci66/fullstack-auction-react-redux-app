@@ -69,6 +69,7 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), (req, r
     username: req.user.username,
     email: req.user.email,
     createdAt: req.user.createdAt,
+    items: req.user.items
   })
 })
 
