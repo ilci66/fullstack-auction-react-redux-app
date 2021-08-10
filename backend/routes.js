@@ -11,7 +11,7 @@ router.get('/items', (req, res) => {
   
 })
 router.post('/item/create', passport.authenticate('jwt', { session: false }), (req, res) => {
-
+  
 })
 
 

@@ -11,6 +11,8 @@ const itemSchema = new mongoose.Schema({
   name: String,
   description: String,
   buyout: String,
+  starting: String,
+  added_by: String,
   isBid: {type: Boolean, default: false, index:true},
   bids: [bidSchema]
 }, {timestamps: true});

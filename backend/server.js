@@ -13,8 +13,8 @@ require('./config/passport')(passport);
 
 app.use(passport.initialize());
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json({limit: '16mb', extended: true}))
+app.use(bodyParser.urlencoded({limit: '16mb', extended: true }))
 
 app.use(
   cors({
