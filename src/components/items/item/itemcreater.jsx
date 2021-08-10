@@ -42,30 +42,23 @@ const ItemCreater = () => {
             {withCredentials: true} 
           ).then(res => {
             if(res.data.success){
+              alert("Item is succesfully created")
               console.log("the necessary re-render will be handled with redux after the layout is done, profile.jsx will make another call to the database to retrieve all items, gonna add redux later")
+              return;
             }
           }).catch(error => {
             console.log("err in res", error)
             if(error.response.data.error){
-              alert(error.response.data.error);
+              return alert(error.response.data.error);
             }
             alert("Please sign in to be able to create an item")
+            return;
           })
-            
         }
       }catch(error){
         console.log(error)
-
       }
-
-      // axios.post(
-      //   'http://localhost:5000/item/create',
-      //   { headers: {'Authorization': localStorage.getItem("id_token")}}, 
-      //   {image, name, itemDescription, buyout, starting},
-      //   {withCredentials: true} 
-      // )
     }
-    
   }
   
   return(
@@ -129,9 +122,7 @@ const ItemCreater = () => {
       </div>
       <button type="submit" className="btn btn-primary">Create</button>
     </form>
-      
     </div>
-    
   )
 }
 

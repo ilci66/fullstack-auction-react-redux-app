@@ -36,12 +36,15 @@ router.post('/item/create', passport.authenticate('jwt', { session: false }), (r
           res.status(400).json({ error: "an error occured while saving item"})
           return;
         }else{
+          //I don't know why I didn't just use find one update but yeah
           User.findOne({ username: req.user.username }, (err, userData) => {
-            console.log("data to save id of, make it async after breakfast",data._id)
-            userData.items.push(data._id)
+            userData.items = [...userData.items,data._id]
+            userData.save((err, data) => {
+              res.status(200).json({ success: true, message: "succesfully created"})
+              return;
+            })
           })
-          res.status(200).json({ success: true, message: "succesfully created"})
-          return;
+          
         }
       })
     }
