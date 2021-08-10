@@ -12,16 +12,51 @@ const ItemCreater = () => {
   const [buyout, setBuyout] = useState(undefined);
   const [starting, setStarting] = useState(undefined);
 
-  const handleSubmit = (e) => {
+  const handleCreate = async (e) => {
     e.preventDefault()
     console.log("submit")
-    console.log(parseFloat(buyout), typeof starting)
-    if(
-      empty(image) || empty(name) || empty(itemDescription)|| empty(buyout) || empty(starting) ) {
-        return alert("Missing required fields")  
-    }
-    else if(parseFloat(starting) > parseFloat(buyout)){
+    // console.log(parseFloat(buyout), typeof starting)
+    if(empty(image) || empty(name) || empty(itemDescription)|| empty(buyout) || empty(starting) ) {
+      console.log("missing fields")
+      return alert("Missing required fields")  
+    }else if(parseFloat(starting) > parseFloat(buyout)){
+      console.log("starting higher")
       return alert("Starting price can't be lower than buyout")
+    }else{
+      console.log("posting to create")
+      console.log(localStorage.getItem("id_token") !== undefined)
+      try {
+        const convertedImage = await Convert(image);
+        if(convertedImage){
+          const data = await {
+            image: convertedImage, 
+            name, 
+            itemDescription, 
+            buyout, 
+            starting
+          }
+          console.log("supposed to post")
+          axios.post(
+            'http://localhost:5000/item/create', data,
+            { headers: {'Authorization': localStorage.getItem ("id_token")}}, 
+            {withCredentials: true} 
+          ).then(res => console.log("got a res", res)
+          ).catch(error => {
+            console.log("err in res", error)
+            alert("Please sign in to be able to create an item")
+          })
+            
+        }
+      }catch(error){
+        console.log(error)
+      }
+
+      // axios.post(
+      //   'http://localhost:5000/item/create',
+      //   { headers: {'Authorization': localStorage.getItem("id_token")}}, 
+      //   {image, name, itemDescription, buyout, starting},
+      //   {withCredentials: true} 
+      // )
     }
     
   }
@@ -29,7 +64,7 @@ const ItemCreater = () => {
   return(
     <div>
     <h2>Create new Items </h2>
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleCreate}>
     <div className="form-group mb-1">
         <input 
           type="file" 
@@ -85,7 +120,7 @@ const ItemCreater = () => {
           placeholder="200 $"/>
         <label for="FloatingBuyout">Buyout price in <b>$</b></label>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-primary">Create</button>
     </form>
       
     </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import * as moment from "moment";
 
-const Login = () => {
+const SignIn = () => {
   const [ username, setUsername ] = useState("");
   const [ password, setPassword ] = useState("");
   
@@ -22,7 +22,7 @@ const Login = () => {
       const expiresAt = moment().add(Number.parseInt(expiresIn), 'days');
       localStorage.setItem('id_token', token);
       localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()) );
-
+      if(res.data.success === true){ window.location = '/'}
     })
     .catch(error => {
       console.log(error.response.data.error)
@@ -63,8 +63,9 @@ const Login = () => {
         </div>
         <button type ="button" className="btn btn-outline-primary" onClick={handleLogin}>Login</button>
       </div>
+      <p className="mt-5"><a href="/signup">Sign up</a> if you don't have an account.</p>
     </div>
   )
 }
 
-export default Login
+export default SignIn

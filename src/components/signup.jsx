@@ -36,6 +36,7 @@ const Signup = () => {
           const expiresAt = moment().add(Number.parseInt(expiresIn), 'days');
           localStorage.setItem('id_token', token);
           localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()) );
+          if(res.data.success === true){ window.location = '/'}
         })
         .catch(error => {
           console.log(error.response.data.error);
@@ -98,6 +99,7 @@ const Signup = () => {
         </div>
         <button type ="button" className="btn btn-outline-primary" onClick={handleSignup}>Sign Up</button>
       </div>
+      <p className="mt-5"><a href="/signin">Sign in</a> if you have an account.</p>
     </div>
   )
 }

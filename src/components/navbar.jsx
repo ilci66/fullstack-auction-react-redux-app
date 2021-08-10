@@ -16,7 +16,7 @@ const NavBar = () => {
             <Navbar.Collapse id="basic-navbar-nav" className="mr-5 justify-content-end mx-auto">
               <Nav className="p-2">
               <Nav.Link className="m-1" href="/signup">Sign Up</Nav.Link>
-              <Nav.Link className="m-1" href="/signin">Sign Ip</Nav.Link>
+              <Nav.Link className="m-1" href="/signin">Sign In</Nav.Link>
               <Nav.Link className="m-1" href="/edit-create">Create & Edit</Nav.Link>
               {/* <Button className="m-1" variant="secondary" onClick={handleLogout}>Log Out</Button> */}
               </Nav>

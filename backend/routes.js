@@ -11,7 +11,10 @@ router.get('/items', (req, res) => {
   
 })
 router.post('/item/create', passport.authenticate('jwt', { session: false }), (req, res) => {
-  
+  console.log('req.body in create >>', req.body)
+  console.log("created by >>>",req.user.username)
+  res.status(200).json({ success: true, message: "hey"})
+  const { image, name, itemDescription, buyout, starting} = req.body;
 })
 
 
@@ -26,7 +29,7 @@ router.get('/item/bid', passport.authenticate('jwt', { session: false }), (req, 
 
 
 router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
-  console.log("this is the req.user>>>>", req.user)
+  // console.log("this is the req.user>>>>", req.user)
   return res.status(200).json({ 
     success: true,
     username: req.user.username,
