@@ -12,7 +12,7 @@ const itemSchema = new mongoose.Schema({
   description: String,
   buyout: String,
   starting: String,
-  added_by: String,
+  created_by: String,
   isBid: {type: Boolean, default: false, index:true},
   bids: [bidSchema]
 }, {timestamps: true});

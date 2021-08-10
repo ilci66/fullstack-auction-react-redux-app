@@ -13,8 +13,39 @@ router.get('/items', (req, res) => {
 router.post('/item/create', passport.authenticate('jwt', { session: false }), (req, res) => {
   console.log('req.body in create >>', req.body)
   console.log("created by >>>",req.user.username)
-  res.status(200).json({ success: true, message: "hey"})
+  // res.status(200).json({ success: true, message: "hey"})
   const { image, name, itemDescription, buyout, starting} = req.body;
+  Item.findOne({name: name}, async (err, data) => {
+    if(err){
+      res.status(400).json({ error: "an error occured when searching in database"})
+      return;
+    }else if(data){
+      res.status(400).json({ error: "An item with the same name exists in database"})
+      return;
+    } else {
+      const newItem = await new Item({
+        image: image,
+        name: name,
+        description: itemDescription,
+        buyout: buyout,
+        created_by: req.user.username,
+        starting: starting
+      })
+      newItem.save((err, data) => {
+        if(err){
+          res.status(400).json({ error: "an error occured while saving item"})
+          return;
+        }else{
+          User.findOne({ username: req.user.username }, (err, userData) => {
+            console.log("data to save id of, make it async after breakfast",data._id)
+            userData.items.push(data._id)
+          })
+          res.status(200).json({ success: true, message: "succesfully created"})
+          return;
+        }
+      })
+    }
+  })
 })
 
 

@@ -22,7 +22,7 @@ const Profile = (props) => {
   },[])
   
   return(
-    <div>{userData ? <h2>{`Hello ${userData.username}`}</h2> : "Please login or sign up if you don't have an account"}</div>
+    <div className="mt-5">{userData ? <h2>{`Hello ${userData.username}`}</h2> : "Please login or sign up if you don't have an account"}</div>
   )
 };
 

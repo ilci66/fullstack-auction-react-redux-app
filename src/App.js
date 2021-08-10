@@ -36,8 +36,8 @@ function App() {
           </Route>
           <Route exact path="/edit-create">
             <NavBar />
-            <Profile />
             <ItemCreater />
+            <Profile />
           </Route>
         </Switch>
       </Router>
