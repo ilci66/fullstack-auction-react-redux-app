@@ -24,7 +24,7 @@ const Profile = (props) => {
   },[])
   
   return(
-    <div className="mt-5">{userData ? 
+    <div className="mt-1">{userData ? 
     <>
       <h2>
       {`Hello ${userData.username}`} 

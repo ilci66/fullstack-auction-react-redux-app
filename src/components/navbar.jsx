@@ -17,7 +17,7 @@ const NavBar = () => {
               <Nav className="p-2">
               <Nav.Link className="m-1" href="/signup">Sign Up</Nav.Link>
               <Nav.Link className="m-1" href="/signin">Sign In</Nav.Link>
-              <Nav.Link className="m-1" href="/edit-create">Create & Edit</Nav.Link>
+              <Nav.Link className="m-1" href="/profile">Profile</Nav.Link>
               {/* <Button className="m-1" variant="secondary" onClick={handleLogout}>Log Out</Button> */}
               </Nav>
             </Navbar.Collapse>

@@ -6,10 +6,9 @@ import Item from './components/items/item/item';
 import Signin from './components/signin';
 import Signup from './components/signup';
 import NavBar from './components/navbar';
-import Profile from './components/profile';
+import Profile from './components/profile/profile';
 import Sidebar from './components/sidebar';
 import Home from './components/home'
-import ItemCreater from './components/items/item/itemcreater'
 
 
 import './App.css';
@@ -34,9 +33,8 @@ function App() {
             <NavBar />
             <Item />
           </Route>
-          <Route exact path="/edit-create">
+          <Route exact path="/profile">
             <NavBar />
-            <ItemCreater />
             <Profile />
           </Route>
         </Switch>
