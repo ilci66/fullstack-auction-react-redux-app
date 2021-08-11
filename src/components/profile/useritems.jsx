@@ -5,7 +5,7 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import ru from 'javascript-time-ago/locale/ru'
 
-const Profile = (props) => {
+const UserItems = ({handleEdit}) => {
   const [ userData, setUserData ] = useState(undefined);
   useEffect(() => {
     axios.get(
@@ -20,9 +20,7 @@ const Profile = (props) => {
       console.log(error)
     })
   },[])
-  const handleEdit = () => {
 
-  };
   
   const handleDelete = () => {
 
@@ -45,33 +43,31 @@ const Profile = (props) => {
               //I could reverse the order but for now not doing that 
               userData.itemData.map(item => {
                 return<div className="col d-flex"> 
-                <div class="card">
+                <div className="card">
                   <img src={item.image} className="card-img-top"></img>
                   <div className="card-body">
                     <h5 className="card-title">{item.name}</h5>
-                    <p class="card-text">{item.description}</p>
+                    <p className="card-text">{item.description}</p>
                   </div>
-                  <div class="card-footer">
+                  <div className="card-footer">
                     Created <ReactTimeAgo date={item.createdAt}/>
-                  </div><div class="card-footer">
+                  </div><div className="card-footer">
                     Starting price: {item.starting} $
                   </div>
-                  <div class="card-footer">
+                  <div className="card-footer">
                     Buyout price: {item.buyout} $
                   </div>
-                  <div class="card-footer">
+                  <div className="card-footer">
                     Highest Bid: {item.bid ? `${item.bid[-1]} $` : "No bid so far"}
-                  <div className="d-flex mt-2">
-                    {!item.bid && <div className="btn btn-lg btn-outline-success mx-auto">Edit</div>}
-                    {!item.bid && <div className="btn btn-lg btn-outline-danger mx-auto">Delete</div>}
-                  </div>
-                    
+                    <div className="d-flex mt-2">
+                      {!item.bid && <div onClick={handleEdit} id={item.name} className="btn btn-lg btn-outline-success mx-auto">Edit</div>}
+                      {!item.bid && <div className="btn btn-lg btn-outline-danger mx-auto">Delete</div>}
+                    </div>
                   </div>
                  </div>
                 </div>
               })
             }
-          
         </div>
         {/* 
         </div>
@@ -93,4 +89,4 @@ const Profile = (props) => {
   )
 };
 
-export default Profile
+export default UserItems

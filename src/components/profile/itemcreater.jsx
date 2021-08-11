@@ -4,15 +4,32 @@ import empty from 'is-empty';
 import axios from 'axios';
 
 
-const ItemCreater = () => {
+const ItemCreater = ({ objToEdit, setObjToEdit }) => {
 
+  const imageElement = document.getElementById('imageture');
+  const nameElement = document.getElementById('floatingName');
+  const descriptionElement = document.getElementById('floatingDescription');
+  const startingElement = document.getElementById('FloatingStarting');
+  const buyoutElement = document.getElementById('FloatingBuyout');
+
+  const [isEdit ,setIsEdit] = useState(false)
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
   const [itemDescription, setIemDescription] = useState("");
   const [buyout, setBuyout] = useState(undefined);
   const [starting, setStarting] = useState(undefined);
 
-  const handleCreate = async (e) => {
+  const handleCancel = () => {
+    setIsEdit(false);
+    imageElement.value = ""
+    nameElement.value = ""
+    descriptionElement.value = ""
+    console.log(startingElement.value)
+    console.log(buyoutElement.value)
+
+  }
+
+  const handleCreateEdit = async (e) => {
     e.preventDefault()
     console.log("submit")
     // console.log(parseFloat(buyout), typeof starting)
@@ -29,6 +46,7 @@ const ItemCreater = () => {
         const convertedImage = await Convert(image);
         if(convertedImage){
           const data = await {
+            isEdit : isEdit,
             image: convertedImage, 
             name, 
             itemDescription, 
@@ -63,8 +81,8 @@ const ItemCreater = () => {
   
   return(
     <div>
-    <h2>Create New Items </h2>
-    <form className="w-80 mx-auto mt-4" onSubmit={handleCreate}>
+    <h2>Create New Items</h2>
+    <form className="w-80 mx-auto mt-4" onSubmit={handleCreateEdit}>
     <div className="form-group mb-1">
         <input 
           type="file" 
@@ -94,9 +112,9 @@ const ItemCreater = () => {
           type="text" 
           className="form-control" 
           onChange={(e) => setIemDescription(e.target.value)} 
-          id="floatingPostDescription" 
+          id="floatingDescription" 
           placeholder="A cool sword from 1700"/>
-        <label for="FloatingPostDescription">Description</label>
+        <label for="FloatingDescription">Description</label>
       </div>
       <div className="form-group form-floating mb-3">
         <input
@@ -120,8 +138,9 @@ const ItemCreater = () => {
           placeholder="200 $"/>
         <label for="FloatingBuyout">Buyout (<b>$</b>)</label>
       </div>
-      <button type="submit" className="btn btn-primary">Create</button>
+      <button type="submit" className="btn btn-lg btn-outline-success mx-auto w-100">Create</button>
     </form>
+    <button className="btn btn-lg btn-outline-danger mx-auto mt-3 w-100" onClick={handleCancel}>Cancel</button>
     </div>
   )
 }

@@ -7,9 +7,11 @@ const User = require('./models/user.js');
 const Item = require('./models/item.js');
 const utils = require('./utils')
 
-router.get('/item/all', (req, res) => {
+router.get('/items', (req, res) => {
   
 });
+
+
 
 router.get('/user/items', passport.authenticate('jwt', { session: false }), (req, res) => {
   console.log("username>>>", req.user.username)
@@ -33,41 +35,64 @@ router.post('/item/create', passport.authenticate('jwt', { session: false }), (r
   console.log('req.body in create >>', req.body)
   console.log("created by >>>",req.user.username)
   // res.status(200).json({ success: true, message: "hey"})
-  const { image, name, itemDescription, buyout, starting} = req.body;
-  Item.findOne({name: name}, async (err, data) => {
-    if(err){
-      res.status(400).json({ error: "an error occured when searching in database"})
-      return;
-    }else if(data){
-      res.status(400).json({ error: "An item with the same name exists in database"})
-      return;
-    } else {
-      const newItem = await new Item({
-        image: image,
-        name: name,
-        description: itemDescription,
-        buyout: buyout,
-        created_by: req.user.username,
-        starting: starting
-      })
-      newItem.save((err, data) => {
-        if(err){
-          res.status(400).json({ error: "an error occured while saving item"})
-          return;
-        }else{
-          //I don't know why I didn't just use find one update but yeah
-          User.findOne({ username: req.user.username }, (err, userData) => {
-            userData.createdItems = [...userData.createdItems,data._id]
-            userData.save((err, data) => {
-              res.status(200).json({ success: true, message: "succesfully created"})
-              return;
+  const { isEdit, image, name, itemDescription, buyout, starting} = req.body;
+  if(!isEdit){
+    Item.findOne({name: name}, async (err, data) => {
+      if(err){
+        res.status(400).json({ error: "an error occured when searching in database"})
+        return;
+      }else if(data){
+        res.status(400).json({ error: "An item with the same name exists in database"})
+        return;
+      } else {
+        const newItem = await new Item({
+          image: image,
+          name: name,
+          description: itemDescription,
+          buyout: buyout,
+          created_by: req.user.username,
+          starting: starting
+        })
+        newItem.save((err, data) => {
+          if(err){
+            res.status(400).json({ error: "an error occured while saving item"})
+            return;
+          }else{
+            //I don't know why I didn't just use find one update but yeah
+            User.findOne({ username: req.user.username }, (err, userData) => {
+              userData.createdItems = [...userData.createdItems,data._id]
+              userData.save((err, data) => {
+                res.status(200).json({ success: true, message: "succesfully created"})
+                return;
+              })
             })
-          })
-          
+            
+          }
+        })
+      }
+    })
+  }else{
+    Item.findOneAndUpdate(
+      {name: name}, 
+      {
+        image: image, 
+        name: name, 
+        description: description, 
+        buyout: buyout,
+        starting: starting
+      }, 
+      async (err, data) => {
+        if(err){
+          res.status(400).json({ error: "an error occured when searching in database"})
+          return;
+        }else if(!data){
+          res.status(400).json({ error: "there is no data to edit in the database"})
+        }else {
+          res.status(200).json({ success: true, message: "succesfully edited"})
         }
-      })
-    }
-  })
+      }
+    )
+  }
 })
 
 
