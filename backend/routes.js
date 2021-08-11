@@ -7,9 +7,28 @@ const User = require('./models/user.js');
 const Item = require('./models/item.js');
 const utils = require('./utils')
 
-router.get('/items', (req, res) => {
+router.get('/item/all', (req, res) => {
   
+});
+
+router.get('/user/items', passport.authenticate('jwt', { session: false }), (req, res) => {
+  console.log("username>>>", req.user.username)
+  Item.find({ created_by: req.user.username }, (err, data) => {
+    if(err){
+      res.status(400).json({ error: "an error occured while retrieving your items"})
+    }else{
+      res.status(200).json({
+        success: true,
+        username: req.user.username,
+        email: req.user.email,
+        createdAt: req.user.createdAt,
+        createdItems: req.user.createdItems,
+        itemData: data
+      })
+    }
+  })
 })
+
 router.post('/item/create', passport.authenticate('jwt', { session: false }), (req, res) => {
   console.log('req.body in create >>', req.body)
   console.log("created by >>>",req.user.username)
@@ -38,7 +57,7 @@ router.post('/item/create', passport.authenticate('jwt', { session: false }), (r
         }else{
           //I don't know why I didn't just use find one update but yeah
           User.findOne({ username: req.user.username }, (err, userData) => {
-            userData.items = [...userData.items,data._id]
+            userData.createdItems = [...userData.createdItems,data._id]
             userData.save((err, data) => {
               res.status(200).json({ success: true, message: "succesfully created"})
               return;
@@ -69,7 +88,7 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), (req, r
     username: req.user.username,
     email: req.user.email,
     createdAt: req.user.createdAt,
-    items: req.user.items
+    createdItems: req.user.createdItems
   })
 })
 

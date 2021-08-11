@@ -82,10 +82,10 @@ const ItemCreater = () => {
           type="text" 
           className="form-control" 
           onChange={(e) =>setName(e.target.value)} 
-          id="floatingTitle" 
-          placeholder="Example Title"
+          id="floatingName" 
+          placeholder="Example Name"
         />
-        <label for="floatingInput">Post Title </label>
+        <label for="floatingName">Item Name</label>
       </div>
       <div className="form-group form-floating mb-3">
         <input
@@ -107,7 +107,7 @@ const ItemCreater = () => {
           onChange={(e) => setStarting(e.target.value)} 
           id="floatingStarting" 
           placeholder="10 $"/>
-        <label for="FloatingStarting">Starting price in <b>$</b></label>
+        <label for="FloatingStarting">Starting (<b>$</b>)</label>
       </div>
       <div className="form-group form-floating mb-3">
         <input
@@ -118,7 +118,7 @@ const ItemCreater = () => {
           onChange={(e) => setBuyout(e.target.value)} 
           id="floatingBuyout" 
           placeholder="200 $"/>
-        <label for="FloatingBuyout">Buyout price in <b>$</b></label>
+        <label for="FloatingBuyout">Buyout (<b>$</b>)</label>
       </div>
       <button type="submit" className="btn btn-primary">Create</button>
     </form>

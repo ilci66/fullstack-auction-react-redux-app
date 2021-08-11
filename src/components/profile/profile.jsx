@@ -13,7 +13,7 @@ const Profile = () => {
         <div className="col-4 mx-auto"><UserToPay /></div>
       </div>
       <div className="row">
-        <div className="col-11 md-auto"><UserItems /></div>
+        <div className="col-12 md-auto"><UserItems /></div>
       </div>
     </div>
   )

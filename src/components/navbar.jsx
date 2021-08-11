@@ -5,6 +5,9 @@ import { Navbar,Nav,NavDropdown,Form,FormControl,Button } from 'react-bootstrap'
 const NavBar = () => {
   const handleLogout = () => {
     console.log("wanna logout")
+    localStorage.removeItem("id_token");
+    localStorage.removeItem("expires_at");
+    window.location = "/"
   }
   return(
     <div>
@@ -18,7 +21,7 @@ const NavBar = () => {
               <Nav.Link className="m-1" href="/signup">Sign Up</Nav.Link>
               <Nav.Link className="m-1" href="/signin">Sign In</Nav.Link>
               <Nav.Link className="m-1" href="/profile">Profile</Nav.Link>
-              {/* <Button className="m-1" variant="secondary" onClick={handleLogout}>Log Out</Button> */}
+              <Button className="m-1" variant="secondary" onClick={handleLogout}>Log Out</Button>
               </Nav>
             </Navbar.Collapse>
           </Navbar>
