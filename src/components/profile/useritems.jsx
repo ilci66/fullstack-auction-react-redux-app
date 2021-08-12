@@ -1,4 +1,5 @@
 import React, { useEffect, useState} from 'react';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
@@ -6,7 +7,11 @@ import en from 'javascript-time-ago/locale/en'
 import ru from 'javascript-time-ago/locale/ru'
 
 const UserItems = ({handleEdit}) => {
+  const dispatch = useDispatch();
+
   const [ userData, setUserData ] = useState(undefined);
+  
+  
   useEffect(() => {
     axios.get(
       'http://localhost:5000/user/items',
@@ -23,7 +28,7 @@ const UserItems = ({handleEdit}) => {
 
   
   const handleDelete = () => {
-
+    // dispatch()
   };
 
   // console.log(userData)

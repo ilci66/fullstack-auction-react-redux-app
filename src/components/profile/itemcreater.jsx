@@ -4,7 +4,7 @@ import empty from 'is-empty';
 import axios from 'axios';
 
 
-const ItemCreater = ({ objToEdit, setObjToEdit }) => {
+const ItemCreater = ({ objToEdit, setObjToEdit, isEdit, setIsEdit }) => {
 
   const imageElement = document.getElementById('imageture');
   const nameElement = document.getElementById('floatingName');
