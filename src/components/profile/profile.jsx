@@ -8,9 +8,7 @@ const Profile = () => {
   const [objToEdit, setObjToEdit] = useState({});
 
   const handleEdit = (e) => {
-    //get item information here and give it ObjToEdit 
-    //pass it down to the itemcreator, route already handled for it
-    //gonna continue tomorrow
+
     setObjToEdit();
   }
 

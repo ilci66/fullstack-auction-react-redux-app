@@ -9,8 +9,8 @@ const ItemCreater = ({ objToEdit, setObjToEdit }) => {
   const imageElement = document.getElementById('imageture');
   const nameElement = document.getElementById('floatingName');
   const descriptionElement = document.getElementById('floatingDescription');
-  const startingElement = document.getElementById('FloatingStarting');
-  const buyoutElement = document.getElementById('FloatingBuyout');
+  const startingElement = document.getElementById('floatingStarting');
+  const buyoutElement = document.getElementById('floatingBuyout');
 
   const [isEdit ,setIsEdit] = useState(false)
   const [image, setImage] = useState("");
@@ -19,13 +19,23 @@ const ItemCreater = ({ objToEdit, setObjToEdit }) => {
   const [buyout, setBuyout] = useState(undefined);
   const [starting, setStarting] = useState(undefined);
 
+  useEffect(() => {
+    if(isEdit){
+      imageElement.value =  objToEdit.image
+      nameElement.value = objToEdit.name
+      descriptionElement.value = objToEdit.description
+      startingElement.value = objToEdit.starting
+      buyoutElement.value = objToEdit.buyout
+    }
+  }, [isEdit])
+
   const handleCancel = () => {
     setIsEdit(false);
     imageElement.value = ""
     nameElement.value = ""
     descriptionElement.value = ""
-    console.log(startingElement.value)
-    console.log(buyoutElement.value)
+    buyoutElement.value = null
+    startingElement.value = null
 
   }
 
@@ -114,7 +124,7 @@ const ItemCreater = ({ objToEdit, setObjToEdit }) => {
           onChange={(e) => setIemDescription(e.target.value)} 
           id="floatingDescription" 
           placeholder="A cool sword from 1700"/>
-        <label for="FloatingDescription">Description</label>
+        <label for="floatingDescription">Description</label>
       </div>
       <div className="form-group form-floating mb-3">
         <input
@@ -122,10 +132,10 @@ const ItemCreater = ({ objToEdit, setObjToEdit }) => {
           type="number" 
           step=".01"
           className="form-control" 
-          onChange={(e) => setStarting(e.target.value)} 
-          id="floatingStarting" 
-          placeholder="10 $"/>
-        <label for="FloatingStarting">Starting (<b>$</b>)</label>
+          id="floatingStarting"
+          placeholder="10"
+          onChange={(e) => setStarting(e.target.value)} />
+        <label for="floatingStarting">Starting (<b>$</b>)</label>
       </div>
       <div className="form-group form-floating mb-3">
         <input
@@ -133,10 +143,10 @@ const ItemCreater = ({ objToEdit, setObjToEdit }) => {
           type="number" 
           step=".01"
           className="form-control" 
-          onChange={(e) => setBuyout(e.target.value)} 
           id="floatingBuyout" 
-          placeholder="200 $"/>
-        <label for="FloatingBuyout">Buyout (<b>$</b>)</label>
+          placeholder="100"
+          onChange={(e) => setBuyout(e.target.value)} />
+        <label for="floatingBuyout">Buyout (<b>$</b>)</label>
       </div>
       <button type="submit" className="btn btn-lg btn-outline-success mx-auto w-100">Create</button>
     </form>
