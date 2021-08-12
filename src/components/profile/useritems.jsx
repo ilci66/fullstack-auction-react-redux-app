@@ -60,6 +60,7 @@ const UserItems = ({handleEdit}) => {
                   <div className="card-footer">
                     Highest Bid: {item.bid ? `${item.bid[-1]} $` : "No bid so far"}
                     <div className="d-flex mt-2">
+                      {/* I can pass the id in the arguments to the parent but let's practise some redux */}
                       {!item.bid && <div onClick={handleEdit} id={item.name} className="btn btn-lg btn-outline-success mx-auto">Edit</div>}
                       {!item.bid && <div className="btn btn-lg btn-outline-danger mx-auto">Delete</div>}
                     </div>
@@ -69,17 +70,6 @@ const UserItems = ({handleEdit}) => {
               })
             }
         </div>
-        {/* 
-        </div>
-          <div class="col">
-            <div class="card">
-              <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-          </div>
-        </div> */}
       </div>
     </>
     

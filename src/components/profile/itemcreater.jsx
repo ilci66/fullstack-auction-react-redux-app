@@ -12,7 +12,7 @@ const ItemCreater = ({ objToEdit, setObjToEdit }) => {
   const startingElement = document.getElementById('floatingStarting');
   const buyoutElement = document.getElementById('floatingBuyout');
 
-  const [isEdit ,setIsEdit] = useState(false)
+  
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
   const [itemDescription, setIemDescription] = useState("");
@@ -30,6 +30,7 @@ const ItemCreater = ({ objToEdit, setObjToEdit }) => {
   }, [isEdit])
 
   const handleCancel = () => {
+    setObjToEdit({})
     setIsEdit(false);
     imageElement.value = ""
     nameElement.value = ""
