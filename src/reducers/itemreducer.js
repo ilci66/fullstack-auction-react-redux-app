@@ -12,6 +12,15 @@ import {
 
 import { editItem, deleteItem } from '../actions/actioncreater'
 
+// need an initial state where i can put all the post created 
+//by the user, edit, delete anc reate happens there too, and 
+//instead of diectly from the api call I can get the necessary 
+//data here, this way the changes would cause a re-render as well 
+
+// const initialState = {
+//   user:"someone",
+//   userItems: "some Items"
+// }
 
 const itemReducer = (state = [], action)=> {
   switch(action.type){
@@ -19,7 +28,8 @@ const itemReducer = (state = [], action)=> {
       console.log('editing in reducer')
       break;
     case DELETE_ITEM:
-      console.log("wanna delete using dispatch and stuff")
+      deleteItem(action.payload)
+      console.log("wanna delete using dispatch and stuff", action.payload)
 
       break;
     default:

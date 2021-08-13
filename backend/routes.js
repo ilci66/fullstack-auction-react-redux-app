@@ -98,10 +98,15 @@ router.post('/item/create', passport.authenticate('jwt', { session: false }), (r
 
 router.post('item/edit', passport.authenticate('jwt', { session: false }), (req, res) => {
 
-})
+});
 
 router.get('/item/bid', passport.authenticate('jwt', { session: false }), (req, res) => {
   
+});
+
+router.delete('item/delete',  passport.authenticate('jwt', { session: false }), (req, res) => {
+  console.log("delete backend")
+
 })
 
 

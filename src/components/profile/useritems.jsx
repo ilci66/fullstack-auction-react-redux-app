@@ -1,4 +1,5 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState, useRef} from 'react';
+import { DELETE_ITEM } from '../../actions/actiontypes'
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import ReactTimeAgo from 'react-time-ago'
@@ -27,8 +28,13 @@ const UserItems = ({handleEdit}) => {
   },[])
 
   
-  const handleDelete = () => {
-    // dispatch()
+  const handleDelete = (e) => {
+    const targetId = e.target.parentNode.parentNode.parentNode.parentNode.id
+    console.log(targetId)
+    dispatch({
+      type: DELETE_ITEM,
+      payload: targetId
+    })
   };
 
   // console.log(userData)
@@ -45,9 +51,9 @@ const UserItems = ({handleEdit}) => {
       <div className="container">
         <div className="row row-cols-1 row-cols-md-3 g-4">
             {
-              //I could reverse the order but for now not doing that 
               userData.itemData.map(item => {
-                return<div className="col d-flex"> 
+                {/* gave the id={item.name} to the container div here */}
+                return<div id={item._id} className="col d-flex"> 
                 <div className="card">
                   <img src={item.image} className="card-img-top"></img>
                   <div className="card-body">
@@ -66,8 +72,10 @@ const UserItems = ({handleEdit}) => {
                     Highest Bid: {item.bid ? `${item.bid[-1]} $` : "No bid so far"}
                     <div className="d-flex mt-2">
                       {/* I can pass the id in the arguments to the parent but let's practise some redux */}
-                      {!item.bid && <div onClick={handleEdit} id={item.name} className="btn btn-lg btn-outline-success mx-auto">Edit</div>}
-                      {!item.bid && <div className="btn btn-lg btn-outline-danger mx-auto">Delete</div>}
+                      {/* {!item.bid && <div onClick={handleEdit} id={item.name} className="btn btn-lg btn-outline-success mx-auto">Edit</div>} */}
+                      {/* gonna give the id={item.name} to the parent to abe able to reach it with both my buttons */}
+                      {!item.bid && <div onClick={handleEdit} className="btn btn-lg btn-outline-success mx-auto">Edit</div>}
+                      {!item.bid && <div onClick={handleDelete} className="btn btn-lg btn-outline-danger mx-auto">Delete</div>}
                     </div>
                   </div>
                  </div>

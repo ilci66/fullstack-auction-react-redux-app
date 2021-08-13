@@ -22,6 +22,9 @@ const SignIn = () => {
       const expiresAt = moment().add(Number.parseInt(expiresIn), 'days');
       localStorage.setItem('id_token', token);
       localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()) );
+      
+      
+      console.log("is success", res.data.success)
       if(res.data.success === true){ window.location = '/'}
     })
     .catch(error => {
