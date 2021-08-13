@@ -14,11 +14,12 @@ router.get('/items', (req, res) => {
 
 
 router.get('/user/items', passport.authenticate('jwt', { session: false }), (req, res) => {
-  console.log("username>>>", req.user.username)
+  console.log("getting items of username>>>", req.user.username)
   Item.find({ created_by: req.user.username }, (err, data) => {
     if(err){
       res.status(400).json({ error: "an error occured while retrieving your items"})
     }else{
+      console.log("sending user items from api")
       res.status(200).json({
         success: true,
         username: req.user.username,

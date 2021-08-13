@@ -1,35 +1,51 @@
 import React, { useEffect, useState, useRef} from 'react';
-import { DELETE_ITEM, GET_USER_ITEMS } from '../../actions/actiontypes'
-import { useDispatch } from 'react-redux';
+import { DELETE_ITEM, GET_USER_ITEMS, GET_USER_INFO } from '../../actions/actiontypes'
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import ru from 'javascript-time-ago/locale/ru'
 
+//this is how to reach state with hooks in react-redux
+//const counter = useSelector((state) => state.counter)
+
+
 const UserItems = ({handleEdit}) => {
   const dispatch = useDispatch();
-
+  const loading = useSelector((state) => state.loading)
+  const userItems = useSelector((state) => state.userItems)
+  const userInfo = useSelector((state) => state.userInfo)
+  console.log("user items from store>>", userItems)
+  // console.log("reachin state inside the store",loading)
   const [ userData, setUserData ] = useState(undefined);
   
   
   useEffect(() => {
-    dispatch({
-      type: GET_USER_ITEMS,
-      payload: localStorage.getItem("id_token")
-    })
-    //gonna handle this using redux
-    // axios.get(
-    //   'http://localhost:5000/user/items',
-    //   {headers: {
-    //     'Authorization': localStorage.getItem("id_token")
-    //   }} 
-    // ).then(async (res) => {
-    //   const resData = await res.data 
-    //   setUserData(resData)
-    // }).catch(error => {
-    //   console.log(error)
+    // dispatch({
+    //   type: GET_USER_ITEMS,
+    //   payload: localStorage.getItem("id_token")
     // })
+    //gonna handle this using redux
+    axios.get(
+      'http://localhost:5000/user/items',
+      {headers: {
+        'Authorization': localStorage.getItem("id_token")
+      }} 
+    ).then(async (res) => {
+      const resData = await res.data
+      // setUserData(resData)
+      dispatch({
+        type: GET_USER_ITEMS,
+        payload: resData.itemData
+      })
+      dispatch({
+        type: GET_USER_INFO,
+        payload: resData
+      })
+    }).catch(error => {
+      console.log(error)
+    })
   },[])
 
   
@@ -44,19 +60,19 @@ const UserItems = ({handleEdit}) => {
 
   // console.log(userData)
   return(
-    <div className="mt-1">{userData ? 
+    <div className="mt-1">{userInfo ? 
     <>
       <h2>
-      {`Hello ${userData.username}`} 
+      {`Hello ${userInfo.username}`} 
       </h2> 
       <p>
-        You joined our community <b><ReactTimeAgo date={userData.createdAt} locale="en-US"/></b><br/>
-        Since then you created {userData.createdItems.length == 1 ? "1 item" : `${userData.createdItems.length} items`} 
+        You joined our community <b><ReactTimeAgo date={userInfo.createdAt} locale="en-US"/></b><br/>
+        Since then you created {userItems.length == 1 ? "1 item" : `${userItems.length} items`} 
       </p>
       <div className="container">
         <div className="row row-cols-1 row-cols-md-3 g-4">
             {
-              userData.itemData.map(item => {
+              userItems.map(item => {
                 {/* gave the id={item.name} to the container div here */}
                 return<div id={item._id} className="col d-flex"> 
                 <div className="card">
