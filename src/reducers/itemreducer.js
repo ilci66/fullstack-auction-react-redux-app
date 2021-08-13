@@ -1,16 +1,20 @@
 import { 
-  GET_ALL_ITEMS, 
+  // GET_ALL_ITEMS, 
   GET_USER_ITEMS, 
-  SIGN_UP, 
-  SIGN_IN, 
-  CREATE_ITEM, 
+  // SIGN_UP, 
+  // SIGN_IN, 
+  // CREATE_ITEM, 
   EDIT_ITEM, 
   DELETE_ITEM, 
-  BID_ITEM, 
-  BUYOUT_ITEM 
+  // BID_ITEM, 
+  // BUYOUT_ITEM 
 } from '../actions/actiontypes';
 
-import { editItem, deleteItem } from '../actions/actioncreater'
+import { 
+  // editItem, 
+  deleteItem, 
+  getUserItems 
+} from '../actions/actioncreater'
 
 // need an initial state where i can put all the post created 
 //by the user, edit, delete anc reate happens there too, and 
@@ -21,19 +25,33 @@ import { editItem, deleteItem } from '../actions/actioncreater'
 //   user:"someone",
 //   userItems: "some Items"
 // }
+const initialState = {
+  userInfo: {
+    username: "",
+    email: ""
+  },
+  userItems: []
+}
 
-const itemReducer = (state = [], action)=> {
+
+const itemReducer = (state = initialState, action)=> {
   switch(action.type){
+    case GET_USER_ITEMS:
+      console.log("get user items in reducer triggered")
+      getUserItems(action.payload)
+     
+      break;
+
     case EDIT_ITEM:
       console.log('editing in reducer')
       break;
     case DELETE_ITEM:
       deleteItem(action.payload)
       console.log("wanna delete using dispatch and stuff", action.payload)
-
       break;
+    
     default:
-      return state;
+      return state
   }
 }
 

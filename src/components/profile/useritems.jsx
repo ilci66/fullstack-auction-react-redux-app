@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef} from 'react';
-import { DELETE_ITEM } from '../../actions/actiontypes'
+import { DELETE_ITEM, GET_USER_ITEMS } from '../../actions/actiontypes'
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import ReactTimeAgo from 'react-time-ago'
@@ -14,17 +14,22 @@ const UserItems = ({handleEdit}) => {
   
   
   useEffect(() => {
-    axios.get(
-      'http://localhost:5000/user/items',
-      {headers: {
-        'Authorization': localStorage.getItem("id_token")
-      }} 
-    ).then(async (res) => {
-      const resData = await res.data 
-      setUserData(resData)
-    }).catch(error => {
-      console.log(error)
+    dispatch({
+      type: GET_USER_ITEMS,
+      payload: localStorage.getItem("id_token")
     })
+    //gonna handle this using redux
+    // axios.get(
+    //   'http://localhost:5000/user/items',
+    //   {headers: {
+    //     'Authorization': localStorage.getItem("id_token")
+    //   }} 
+    // ).then(async (res) => {
+    //   const resData = await res.data 
+    //   setUserData(resData)
+    // }).catch(error => {
+    //   console.log(error)
+    // })
   },[])
 
   
