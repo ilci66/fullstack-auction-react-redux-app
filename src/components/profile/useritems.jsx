@@ -16,7 +16,6 @@ const UserItems = ({handleEdit}) => {
   const loading = useSelector((state) => state.loading)
   const userItems = useSelector((state) => state.userItems)
   const userInfo = useSelector((state) => state.userInfo)
-  console.log("user items from store>>", userItems)
   // console.log("reachin state inside the store",loading)
   const [ userData, setUserData ] = useState(undefined);
   
@@ -47,7 +46,8 @@ const UserItems = ({handleEdit}) => {
       console.log(error)
     })
   },[])
-
+  console.log("user info from the store", userInfo)
+  console.log("user items from store>>", userItems)
   
   const handleDelete = (e) => {
     const targetId = e.target.parentNode.parentNode.parentNode.parentNode.id
@@ -66,8 +66,9 @@ const UserItems = ({handleEdit}) => {
       {`Hello ${userInfo.username}`} 
       </h2> 
       <p>
-        You joined our community <b><ReactTimeAgo date={userInfo.createdAt} locale="en-US"/></b><br/>
-        Since then you created {userItems.length == 1 ? "1 item" : `${userItems.length} items`} 
+        {/* it's not undefined when you hanbdle the user information uncomment it */}
+         You joined our community {/*<b><ReactTimeAgo date={userInfo.createdAt} locale="en-US"/></b>*/}<br/> 
+        You have {userItems.length == 1 ? "1 active item" : `${userItems.length} active items`} 
       </p>
       <div className="container">
         <div className="row row-cols-1 row-cols-md-3 g-4">

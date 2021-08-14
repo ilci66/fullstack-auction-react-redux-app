@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { GET_USER_INFO } from '../actions/actiontypes'
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import * as moment from "moment";
 
@@ -22,7 +24,10 @@ const SignIn = () => {
       const expiresAt = moment().add(Number.parseInt(expiresIn), 'days');
       localStorage.setItem('id_token', token);
       localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()) );
-      
+      // dispatch({
+      //   type: GET_USER_INFO,
+      //   payload: user
+      // })
       
       console.log("is success", res.data.success)
       if(res.data.success === true){ window.location = '/'}

@@ -148,7 +148,7 @@ router.post('/login', (req, res) => {
       } else {
         console.log("everything right sending token")
         const tokenObj = utils.issueJWT(user)
-        res.status(200).json({ success: true, token: tokenObj.token, expiresIn: tokenObj.expires });
+        res.status(200).json({ success: true, user: { username: user.username, email: user.email, createdAt: user.createdAt}, token: tokenObj.token, expiresIn: tokenObj.expires });
       }
     }
   })
@@ -186,7 +186,7 @@ router.post('/register', (req, res) => {
           console.log("registered new user")
           // res.status(201).json(user)
           const jwt = utils.issueJWT(user)
-          res.status(201).json({ success: true, user: user, token: jwt.token, expiresIn: jwt.expires});
+          res.status(201).json({ success: true, user: { username: user.username, email: user.email, createdAt: user.createdAt}, token: jwt.token, expiresIn: jwt.expires});
         })
         .catch(error => console.log(error))
     }
