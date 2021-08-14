@@ -20,6 +20,7 @@ const ItemCreater = ({ objToEdit, setObjToEdit, isEdit, setIsEdit }) => {
   const [starting, setStarting] = useState(undefined);
 
   useEffect(() => {
+    
     if(isEdit){
       imageElement.value =  objToEdit.image
       nameElement.value = objToEdit.name

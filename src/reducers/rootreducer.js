@@ -7,6 +7,8 @@ import {
   // SIGN_IN, 
   // CREATE_ITEM, 
   EDIT_ITEM, 
+  TURN_ON_EDIT,
+  TURN_OFF_EDIT,
   DELETE_ITEM, 
   // BID_ITEM, 
   // BUYOUT_ITEM 
@@ -59,11 +61,17 @@ const rootReducer = (state = initialState, action)=> {
       break;
     case GET_USER_ITEMS:
       console.log(action.payload)
+      state.userItems = []
       return {...state,
         userItems: state.userItems.concat(action.payload)
       }
       break;
-
+    case TURN_ON_EDIT:
+      return Object.assign({}, state, {isEdit: true})
+      break;
+    case TURN_OFF_EDIT:
+      return Object.assign({}, state, {isEdit: false})
+      break;
     case EDIT_ITEM:
       console.log('editing in reducer')
       break;

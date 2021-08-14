@@ -8,15 +8,16 @@ const Profile = () => {
   const [objToEdit, setObjToEdit] = useState({});
   const [isEdit ,setIsEdit] = useState(false)
 
-  const handleEdit = (e) => {
-    if(isEdit){
-      alert("please finish editing first")
-      return;
-    }
-    setIsEdit(true)
+  //gonna use redux for it
+  // const handleEdit = (e) => {
+  //   if(isEdit){
+  //     alert("please finish editing first")
+  //     return;
+  //   }
+  //   setIsEdit(true)
 
-    setObjToEdit();
-  }
+  //   setObjToEdit();
+  // }
 
 
   return(
@@ -33,7 +34,9 @@ const Profile = () => {
         <div className="col-lg-4 col-md-12 mx-auto"><UserToPay /></div>
       </div>
       <div className="row">
-        <div className="col-12 md-auto"><UserItems handleEdit={handleEdit}/></div>
+        {/* <div className="col-12 md-auto"><UserItems handleEdit={handleEdit}/></div>
+         */}
+        <div className="col-12 md-auto"><UserItems /></div>
       </div>
     </div>
   )

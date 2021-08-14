@@ -1,13 +1,10 @@
 import React, { useState } from 'react'
-import { GET_USER_INFO } from '../actions/actiontypes'
-import { useDispatch } from 'react-redux';
 import isEmpty from 'is-empty';
 import validator from 'validator';
 import axios from 'axios'
 import * as moment from "moment";
 
 const Signup = () => {
-  const dispatch = useDispatch() 
   const [ username, setUsername ] = useState("");
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
@@ -34,16 +31,11 @@ const Signup = () => {
           console.log("res >>", res.data)
           const { expiresIn } = await res.data;
           const { token } = await res.data;
-          const { user } = await res.data;
           localStorage.removeItem("id_token");
           localStorage.removeItem("expires_at");
           const expiresAt = moment().add(Number.parseInt(expiresIn), 'days');
           localStorage.setItem('id_token', token);
           localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()) );
-          dispatch({
-            type: GET_USER_INFO,
-            payload: user
-          })
           if(res.data.success === true){ window.location = '/'}
         })
         .catch(error => {

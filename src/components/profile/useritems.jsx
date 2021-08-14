@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef} from 'react';
-import { DELETE_ITEM, GET_USER_ITEMS, GET_USER_INFO } from '../../actions/actiontypes'
+import { DELETE_ITEM, GET_USER_ITEMS, GET_USER_INFO, TURN_ON_EDIT } from '../../actions/actiontypes'
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import ReactTimeAgo from 'react-time-ago'
@@ -10,8 +10,9 @@ import ru from 'javascript-time-ago/locale/ru'
 //this is how to reach state with hooks in react-redux
 //const counter = useSelector((state) => state.counter)
 
-
-const UserItems = ({handleEdit}) => {
+//using redux for edit 
+// const UserItems = ({handleEdit}) => {
+const UserItems = () => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.loading)
   const userItems = useSelector((state) => state.userItems)
@@ -46,8 +47,29 @@ const UserItems = ({handleEdit}) => {
       console.log(error)
     })
   },[])
+  
   console.log("user info from the store", userInfo)
   console.log("user items from store>>", userItems)
+
+  const handleEdit = (e) => {
+    const targetId = e.target.parentNode.parentNode.parentNode.parentNode.id
+    console.log(targetId)
+    dispatch({
+      type: TURN_ON_EDIT,
+    })
+    //get the info from database with it the id, set edit in store to true, 
+    //cancel and create buttons will set it to false 
+    axios.get(
+      `http://localhost:5000/item/${targetId}`,
+      {headers: {
+        'Authorization': localStorage.getItem("id_token")
+      }} 
+    )
+      .then(res => console.log(res))
+      .catch(error => console.log(error))
+      //that's it for now gonna have a break
+      
+  }
   
   const handleDelete = (e) => {
     const targetId = e.target.parentNode.parentNode.parentNode.parentNode.id
@@ -67,7 +89,7 @@ const UserItems = ({handleEdit}) => {
       </h2> 
       <p>
         {/* it's not undefined when you hanbdle the user information uncomment it */}
-         You joined our community {/*<b><ReactTimeAgo date={userInfo.createdAt} locale="en-US"/></b>*/}<br/> 
+         {/* You joined our community <b><ReactTimeAgo date={userInfo.createdAt} locale="en-US"/></b><br/>  */}
         You have {userItems.length == 1 ? "1 active item" : `${userItems.length} active items`} 
       </p>
       <div className="container">

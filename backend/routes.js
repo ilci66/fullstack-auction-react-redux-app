@@ -96,10 +96,13 @@ router.post('/item/create', passport.authenticate('jwt', { session: false }), (r
   }
 })
 
-
-router.post('item/edit', passport.authenticate('jwt', { session: false }), (req, res) => {
-
+router.patch('item/edit', passport.authenticate('jwt', { session: false }), (req, res) => {
+  //gonna modify create route and handle edit here 
 });
+
+router.get('/item/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+  //use this route to get one item in to later user for edit or bid request
+})
 
 router.get('/item/bid', passport.authenticate('jwt', { session: false }), (req, res) => {
   
@@ -148,7 +151,17 @@ router.post('/login', (req, res) => {
       } else {
         console.log("everything right sending token")
         const tokenObj = utils.issueJWT(user)
-        res.status(200).json({ success: true, user: { username: user.username, email: user.email, createdAt: user.createdAt}, token: tokenObj.token, expiresIn: tokenObj.expires });
+        res.status(200).json(
+          { success: true, 
+            user: { 
+              username: user.username, 
+              email: user.email, 
+              createdAt: user.createdAt
+            }, 
+            token: tokenObj.token, 
+            expiresIn: tokenObj.expires 
+          }
+        );
       }
     }
   })
@@ -186,7 +199,18 @@ router.post('/register', (req, res) => {
           console.log("registered new user")
           // res.status(201).json(user)
           const jwt = utils.issueJWT(user)
-          res.status(201).json({ success: true, user: { username: user.username, email: user.email, createdAt: user.createdAt}, token: jwt.token, expiresIn: jwt.expires});
+          res.status(201).json(
+            { 
+              success: true, 
+              user: { 
+                username: user.username,
+                email: user.email, 
+                createdAt: user.createdAt
+              }, 
+              token: jwt.token, 
+              expiresIn: jwt.expires
+            }
+          );
         })
         .catch(error => console.log(error))
     }
