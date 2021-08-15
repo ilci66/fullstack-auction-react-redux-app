@@ -1,5 +1,11 @@
 import React, { useEffect, useState, useRef} from 'react';
-import { DELETE_ITEM, GET_USER_ITEMS, GET_USER_INFO, TURN_ON_EDIT } from '../../actions/actiontypes'
+import { 
+  DELETE_ITEM, 
+  GET_USER_ITEMS, 
+  GET_USER_INFO, 
+  TURN_ON_EDIT,
+  POPULATE_ITEM_FORM  
+} from '../../actions/actiontypes'
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import ReactTimeAgo from 'react-time-ago'
@@ -48,12 +54,12 @@ const UserItems = () => {
     })
   },[])
   
-  console.log("user info from the store", userInfo)
-  console.log("user items from store>>", userItems)
+  // console.log("user info from the store", userInfo)
+  // console.log("user items from store>>", userItems)
 
   const handleEdit = (e) => {
     const targetId = e.target.parentNode.parentNode.parentNode.parentNode.id
-    console.log(targetId)
+    console.log("searching with by this id" ,targetId)
     dispatch({
       type: TURN_ON_EDIT,
     })
@@ -65,8 +71,17 @@ const UserItems = () => {
         'Authorization': localStorage.getItem("id_token")
       }} 
     )
-      .then(res => console.log(res))
-      .catch(error => console.log(error))
+      .then(async (res) => {
+        console.log(res)
+        // const { itemData } = res
+        console.log(res.data.itemData)
+        const { itemData } = await res.data
+        dispatch({
+          type: POPULATE_ITEM_FORM,
+          payload: itemData
+        })
+      })
+      .catch(error => console.log("caught the error here",error))
       //that's it for now gonna have a break
       
   }

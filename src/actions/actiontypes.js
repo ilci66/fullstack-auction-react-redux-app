@@ -6,6 +6,7 @@ export const SIGN_UP = "SIGN UP";
 export const SIGN_IN = "SIGN_IN";
 export const GET_ALL_ITEMS = "GET ALL ITEMS";
 export const GET_USER_ITEMS = "GET USER ITEMS";
+export const POPULATE_ITEM_FORM = "POPULATE USER ITEMS";
 // export const GET_USER_ITEMS_SUCCESS  = 
 export const CREATE_ITEM = "CREATE ITEM";
 export const TURN_ON_EDIT = "TURN ON EDIT";

@@ -6,6 +6,7 @@ import {
   // SIGN_UP, 
   // SIGN_IN, 
   // CREATE_ITEM, 
+  POPULATE_ITEM_FORM,
   EDIT_ITEM, 
   TURN_ON_EDIT,
   TURN_OFF_EDIT,
@@ -38,7 +39,15 @@ const initialState = {
     email: "",
     createdAt: ""
   },
-  isEdit: false
+  isEdit: false,
+  chosenItem:{
+    image: "",
+    name: "",
+    description: "",
+    starting: "",
+    buyout: "",
+    createdAt: ""
+  }
 }
 
 
@@ -48,22 +57,33 @@ const rootReducer = (state = initialState, action)=> {
       makeRequest()
       break;
     case GET_USER_INFO:
-      console.log("palyoad  to get user info", action.payload)
-      state.userInfo = {username:"", email:"", createdAt:""}
-      return Object.assign({}, state, 
-        { userInfo: {
-          username: state.userInfo.username.concat(action.payload.username), 
-          email: state.userInfo.email.concat(action.payload.email),
-          createdAt: state.userInfo.createdAt.concat(action.payload.createdAt) 
+      // console.log("palyoad  to get user info", action.payload)
+      // state.userInfo = {username:"", email:"", createdAt:""}
+      // return Object.assign({}, state, 
+      //   { userInfo: {
+      //     username: state.userInfo.username.concat(action.payload.username), 
+      //     email: state.userInfo.email.concat(action.payload.email),
+      //     createdAt: state.userInfo.createdAt.concat(action.payload.createdAt) 
+      //     }
+      //   },
+      // )
+        return Object.assign({}, state, 
+          { userInfo: {
+              username: action.payload.username,
+              email: action.payload.email,
+              createdAt: action.payload.createdAt
+            }
           }
-        },
-      )
+        )
       break;
     case GET_USER_ITEMS:
-      console.log(action.payload)
-      state.userItems = []
+      // console.log(action.payload)
+      // state.userItems = []
+      // return {...state,
+      //   userItems: state.userItems.concat(action.payload)
+      // }
       return {...state,
-        userItems: state.userItems.concat(action.payload)
+        userItems: action.payload
       }
       break;
     case TURN_ON_EDIT:
@@ -71,6 +91,20 @@ const rootReducer = (state = initialState, action)=> {
       break;
     case TURN_OFF_EDIT:
       return Object.assign({}, state, {isEdit: false})
+      break;
+    case POPULATE_ITEM_FORM:
+      console.log("populate dispatch successful")
+      return Object.assign({}, state, 
+        { chosenItem: {
+          image: action.payload.image,
+          name: action.payload.name,
+          description: action.payload.description,
+          starting: action.payload.starting,
+          buyout: action.payload.buyout,
+          createdAt: action.payload.createdAt
+          }
+        }
+      )
       break;
     case EDIT_ITEM:
       console.log('editing in reducer')

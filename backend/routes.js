@@ -96,13 +96,28 @@ router.post('/item/create', passport.authenticate('jwt', { session: false }), (r
   }
 })
 
+router.get('/item/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+  //use this route to get one item in to later user for edit or bid request
+  console.log("reaches here", req.params.id)
+  const { id } = req.params;
+  Item.findById({ _id:id }, (err, data) => {
+    if(err) {
+      console.log("error in loooking for the item")
+      res.status(400).json({error: `${err}`})
+    } else if(!data) {
+      console.log("no item in database")
+      res.status(400).json({error: "can't find the item"})
+    } else {
+      console.log("actually sending the data")
+      res.status(200).json({ success: true, itemData: data})
+    }
+  })
+})
+
 router.patch('item/edit', passport.authenticate('jwt', { session: false }), (req, res) => {
   //gonna modify create route and handle edit here 
 });
 
-router.get('/item/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-  //use this route to get one item in to later user for edit or bid request
-})
 
 router.get('/item/bid', passport.authenticate('jwt', { session: false }), (req, res) => {
   
