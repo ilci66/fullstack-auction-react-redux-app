@@ -4,7 +4,7 @@ import {
   GET_USER_ITEMS, 
   GET_USER_INFO, 
   TURN_ON_EDIT,
-  POPULATE_ITEM_FORM  
+  ADD_ITEM_TO_EDIT  
 } from '../../actions/actiontypes'
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
@@ -77,7 +77,7 @@ const UserItems = () => {
         console.log(res.data.itemData)
         const { itemData } = await res.data
         dispatch({
-          type: POPULATE_ITEM_FORM,
+          type: ADD_ITEM_TO_EDIT,
           payload: itemData
         })
       })
@@ -112,7 +112,7 @@ const UserItems = () => {
             {
               userItems.map(item => {
                 {/* gave the id={item.name} to the container div here */}
-                return<div id={item._id} className="col d-flex"> 
+                return<div key={item._id} id={item._id} className="col d-flex"> 
                 <div className="card">
                   <img src={item.image} className="card-img-top"></img>
                   <div className="card-body">

@@ -5,8 +5,9 @@ import ItemCreater from './itemcreater';
 import axios from 'axios';
 
 const Profile = () => {
-  const [objToEdit, setObjToEdit] = useState({});
-  const [isEdit ,setIsEdit] = useState(false)
+  //now that I'm using redux these are unnecessary
+  // const [objToEdit, setObjToEdit] = useState({});
+  // const [isEdit ,setIsEdit] = useState(false)
 
   //gonna use redux for it
   // const handleEdit = (e) => {
@@ -24,12 +25,7 @@ const Profile = () => {
     <div className="container">
       <div className="row">
         <div className="col-lg-7 col-md-12 mx-auto">
-          <ItemCreater 
-            objToEdit={objToEdit} 
-            setObjToEdit={setObjToEdit} 
-            setIsEdit={setIsEdit}
-            isEdit={isEdit}
-          />
+          <ItemCreater />
           </div>
         <div className="col-lg-4 col-md-12 mx-auto"><UserToPay /></div>
       </div>

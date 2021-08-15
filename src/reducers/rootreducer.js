@@ -6,7 +6,7 @@ import {
   // SIGN_UP, 
   // SIGN_IN, 
   // CREATE_ITEM, 
-  POPULATE_ITEM_FORM,
+  ADD_ITEM_TO_EDIT,
   EDIT_ITEM, 
   TURN_ON_EDIT,
   TURN_OFF_EDIT,
@@ -40,7 +40,7 @@ const initialState = {
     createdAt: ""
   },
   isEdit: false,
-  chosenItem:{
+  chosenItem:{ 
     image: "",
     name: "",
     description: "",
@@ -92,11 +92,12 @@ const rootReducer = (state = initialState, action)=> {
     case TURN_OFF_EDIT:
       return Object.assign({}, state, {isEdit: false})
       break;
-    case POPULATE_ITEM_FORM:
+    case ADD_ITEM_TO_EDIT:
       console.log("populate dispatch successful")
       return Object.assign({}, state, 
         { chosenItem: {
-          image: action.payload.image,
+          //causing an error for now not touching image
+          // image: action.payload.image,
           name: action.payload.name,
           description: action.payload.description,
           starting: action.payload.starting,

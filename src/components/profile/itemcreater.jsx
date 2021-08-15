@@ -1,10 +1,20 @@
 import React, {useEffect, useState} from 'react';
+import {  
+  TURN_ON_EDIT,
+  TURN_OFF_EDIT,
+  POPULATE_ITEM_FORM  
+} from '../../actions/actiontypes'
+import { useDispatch, useSelector } from 'react-redux';
 import {Convert} from 'mongo-image-converter';
 import empty from 'is-empty';
 import axios from 'axios';
 
 
-const ItemCreater = ({ objToEdit, setObjToEdit, isEdit, setIsEdit }) => {
+const ItemCreater = () => {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {dispatch({type:TURN_OFF_EDIT})}, [])
 
   const imageElement = document.getElementById('imageture');
   const nameElement = document.getElementById('floatingName');
@@ -12,7 +22,14 @@ const ItemCreater = ({ objToEdit, setObjToEdit, isEdit, setIsEdit }) => {
   const startingElement = document.getElementById('floatingStarting');
   const buyoutElement = document.getElementById('floatingBuyout');
 
+
+  const userInfo = useSelector((state) => state.userInfo)
+  const isEdit = useSelector((state) => state.isEdit);
+  const chosenItem = useSelector((state) => state.chosenItem)
   
+  
+  // console.log("chosen item image from store >>", chosenItem)
+
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
   const [itemDescription, setIemDescription] = useState("");
@@ -20,19 +37,34 @@ const ItemCreater = ({ objToEdit, setObjToEdit, isEdit, setIsEdit }) => {
   const [starting, setStarting] = useState(undefined);
 
   useEffect(() => {
-    
+    //it doesn't recoginize the first tunring on of the edit
+    //activates in the second time it turns on 
+    // gonna find a way to fix it
     if(isEdit){
-      imageElement.value =  objToEdit.image
-      nameElement.value = objToEdit.name
-      descriptionElement.value = objToEdit.description
-      startingElement.value = objToEdit.starting
-      buyoutElement.value = objToEdit.buyout
+      // imageElement.value = ""
+      nameElement.value = ""
+      descriptionElement.value = ""
+      buyoutElement.value = null
+      startingElement.value = null
+
+      console.log("is edit from store", isEdit)
+
+      // imageElement.value =  chosenItem.image
+      nameElement.value = chosenItem.name
+      console.log("this is the name element", nameElement.value)
+      descriptionElement.value = chosenItem.description
+      startingElement.value = chosenItem.starting
+      buyoutElement.value = chosenItem.buyout
+      return;
     }
+    console.log("useffect for edit")
   }, [isEdit])
 
   const handleCancel = () => {
-    setObjToEdit({})
-    setIsEdit(false);
+    dispatch({
+      type: TURN_OFF_EDIT,
+    })
+
     imageElement.value = ""
     nameElement.value = ""
     descriptionElement.value = ""
