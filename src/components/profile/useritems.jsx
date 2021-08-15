@@ -4,6 +4,7 @@ import {
   GET_USER_ITEMS, 
   GET_USER_INFO, 
   TURN_ON_EDIT,
+  TURN_OFF_EDIT,
   ADD_ITEM_TO_EDIT  
 } from '../../actions/actiontypes'
 import { useDispatch, useSelector } from 'react-redux';
@@ -72,9 +73,11 @@ const UserItems = () => {
       }} 
     )
       .then(async (res) => {
-        console.log(res)
+
+        // console.log(res)
         // const { itemData } = res
-        console.log(res.data.itemData)
+        // console.log(res.data.itemData)
+        
         const { itemData } = await res.data
         dispatch({
           type: ADD_ITEM_TO_EDIT,

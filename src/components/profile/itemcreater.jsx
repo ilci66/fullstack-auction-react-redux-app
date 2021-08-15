@@ -11,10 +11,8 @@ import axios from 'axios';
 
 
 const ItemCreater = () => {
-
+  
   const dispatch = useDispatch();
-
-  useEffect(() => {dispatch({type:TURN_OFF_EDIT})}, [])
 
   const imageElement = document.getElementById('imageture');
   const nameElement = document.getElementById('floatingName');
@@ -22,11 +20,9 @@ const ItemCreater = () => {
   const startingElement = document.getElementById('floatingStarting');
   const buyoutElement = document.getElementById('floatingBuyout');
 
-
   const userInfo = useSelector((state) => state.userInfo)
   const isEdit = useSelector((state) => state.isEdit);
   const chosenItem = useSelector((state) => state.chosenItem)
-  
   
   // console.log("chosen item image from store >>", chosenItem)
 
@@ -36,29 +32,42 @@ const ItemCreater = () => {
   const [buyout, setBuyout] = useState(undefined);
   const [starting, setStarting] = useState(undefined);
 
+  console.log("is edit from store >>>", isEdit)
+
+  // useEffect(() => {
+  //   dispatch({
+  //     type: TURN_ON_EDIT
+  //   }) 
+  //   dispatch({
+  //     type: TURN_off_EDIT
+  //   })
+  // },[])
+
   useEffect(() => {
     //it doesn't recoginize the first tunring on of the edit
     //activates in the second time it turns on 
     // gonna find a way to fix it
-    if(isEdit){
+    
+    //instead of looking for edit changes look for chosen 
+    // item changes and clear the chosen item after cance 
+    // and create 
+    if(!chosenItem.name==""){
       // imageElement.value = ""
       nameElement.value = ""
       descriptionElement.value = ""
       buyoutElement.value = null
       startingElement.value = null
 
-      console.log("is edit from store", isEdit)
+      console.log("is edit from store  useeffect>>>", isEdit)
 
       // imageElement.value =  chosenItem.image
       nameElement.value = chosenItem.name
-      console.log("this is the name element", nameElement.value)
       descriptionElement.value = chosenItem.description
       startingElement.value = chosenItem.starting
       buyoutElement.value = chosenItem.buyout
-      return;
     }
     console.log("useffect for edit")
-  }, [isEdit])
+  }, [chosenItem])
 
   const handleCancel = () => {
     dispatch({
@@ -125,7 +134,7 @@ const ItemCreater = () => {
   
   return(
     <div>
-    <h2>Create New Items</h2>
+    <h2>{isEdit ? "Edit" : "Create"} An Item</h2>
     <form className="w-80 mx-auto mt-4" onSubmit={handleCreateEdit}>
     <div className="form-group mb-1">
         <input 

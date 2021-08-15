@@ -11,6 +11,7 @@ import {
   TURN_ON_EDIT,
   TURN_OFF_EDIT,
   DELETE_ITEM, 
+  CLEAR_CHOSEN_ITEM,
   // BID_ITEM, 
   // BUYOUT_ITEM 
 } from '../actions/actiontypes';
@@ -107,6 +108,19 @@ const rootReducer = (state = initialState, action)=> {
         }
       )
       break;
+    case CLEAR_CHOSEN_ITEM:
+      return Object.assign({}, state, 
+        { chosenItem: {
+          //causing an error for now not touching image
+          // image: action.payload.image,
+          name: "",
+          description: "",
+          starting: "",
+          buyout: "",
+          createdAt: ""
+          }
+        }
+      )
     case EDIT_ITEM:
       console.log('editing in reducer')
       break;
