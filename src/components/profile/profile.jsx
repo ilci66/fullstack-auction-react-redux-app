@@ -24,15 +24,11 @@ const Profile = () => {
   return(
     <div className="container">
       <div className="row">
-        <div className="col-lg-7 col-md-12 mx-auto">
-          <ItemCreater />
-          </div>
-        <div className="col-lg-4 col-md-12 mx-auto"><UserToPay /></div>
+          <div className="col-lg-7 col-md-12 mx-auto"><ItemCreater /></div>
+          <div className="col-lg-4 col-md-12 mx-auto"><UserToPay /></div>
       </div>
       <div className="row">
-        {/* <div className="col-12 md-auto"><UserItems handleEdit={handleEdit}/></div>
-         */}
-        <div className="col-12 md-auto"><UserItems /></div>
+        <div className="col-12 mx-auto"><UserItems /></div>
       </div>
     </div>
   )

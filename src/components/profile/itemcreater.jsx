@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef } from 'react';
 import {  
   TURN_ON_EDIT,
   TURN_OFF_EDIT,
@@ -39,6 +39,11 @@ const ItemCreater = () => {
 
   useEffect(() => {
     if(!chosenItem.name==""){
+      
+      const createEditForm = document.getElementById('edit-create-form')
+      console.log("yo", createEditForm)
+      createEditForm.scrollIntoView({ behavior: 'smooth' })
+      
       // imageElement.value = ""
       nameElement.value = ""
       descriptionElement.value = ""
@@ -70,10 +75,11 @@ const ItemCreater = () => {
     startingElement.value = null
     
   }
+  
+  
   const handleEdit = async (e) => {
     e.preventDefault();
     // handle scroll to the top
-    // window.scrollTo(0);
     if(empty(nameElement.value) || empty(descriptionElement.value)|| empty(buyoutElement.value) || empty(startingElement.value) ) {
       console.log("missing fields")
       return alert("Missing required fields")  
@@ -110,7 +116,6 @@ const ItemCreater = () => {
               type:RE_RENDER_USER_ITEMS,
               payload: itemData
             })
-
             dispatch({
               type: CLEAR_CHOSEN_ITEM
             })
@@ -129,7 +134,6 @@ const ItemCreater = () => {
           alert("An unknown error occured")
           return;
         })
-      
       }catch(error){
         console.log(error)
       }
@@ -194,7 +198,7 @@ const ItemCreater = () => {
   return(
     <div>
     <h2>{isEdit ? "Edit" : "Create"} An Item</h2>
-    <form className="w-80 mx-auto mt-4" onSubmit={!isEdit ? handleCreate: handleEdit}>
+    <form id="edit-create-form" className="w-80 mx-auto mt-4" onSubmit={!isEdit ? handleCreate: handleEdit}>
     <div className="form-group mb-1">
         {!isEdit ? <input 
           type="file" 

@@ -9,7 +9,13 @@ const utils = require('./utils')
 const empty = require('is-empty')
 
 router.get('/items', (req, res) => {
-  
+  Item.find({}, (err, data) => {
+    if(err){
+      res.status(400).json({ error: "something went wrong"})
+    } else {
+      res.status(200).json({ data: data })
+    }
+  })
 });
 
 

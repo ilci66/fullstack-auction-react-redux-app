@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { ADD_ALL_ITEMS } from '../../actions/actiontypes'
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import {Container, Col, Row, Form, FormControl, Button, Card, Img, Body, Title, Text, Footer, Badge} from 'react-bootstrap'
+// decided to use bootstrap instead of react-bootstrap here,
+// may need to use bootstrap in non react projects in the future
+// import {Container, Col, Row, Form, FormControl, Button, Card, Img, Body, Title, Text, Footer, Badge} from 'react-bootstrap'
 import ReactTimeAgo from 'react-time-ago'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
@@ -12,22 +16,30 @@ TimeAgo.addLocale(ru)
 
 
 const Items = () => {
-  const [allItems, setAllItems] = useState(undefined);
+  // const [allItems, setAllItems] = useState(undefined);
   const [search, setSearch] = useState(undefined);
+
+  useEffect(() => {
+    axios.get('http://localhost:5000/items')
+      .then(res => console.log("all ites", res.data.data))
+      .catch(error => console.log(error))
+  }, [])
 
   const handleSearch = (e) => {
     setSearch(e.target.value)
+    //filter all items by turning the searched word  
     // console.log(e.target.value)
   }
   return(
-
     <div>
-      <Form inline className="w-50 mx-auto">
-        <FormControl type="text"  placeholder="Search" onChange={handleSearch} className="mb-3 text-center w-30"/>
-      </Form>
-      <Container>
+      <div className="form-inline w-50 mx-auto">
+        <input type="text"  placeholder="Search" onChange={handleSearch} className="form-control mb-3 text-center w-30"></input>
+      </div>
+
+
+      {/* <Container>
         <Row>
-          {/* <Col lg={3} md={4} sm={12}><Item /></Col>  */}
+          {/* <Col lg={3} md={4} sm={12}><Item /></Col>  
           <Col lg={9} md={8} sm={12} className="">
           <Row xs={1} md={2} className="g-4">
             {allItems && search === undefined ? allItems.map(item => {
@@ -67,7 +79,7 @@ const Items = () => {
           </Col>
         </Row>
         
-      </Container>
+      </Container> */}
     </div>
   )
 };

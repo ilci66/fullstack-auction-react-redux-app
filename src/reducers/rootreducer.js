@@ -1,7 +1,7 @@
 import { 
   MAKE_REQUEST,
   GET_USER_INFO,  
-  // GET_ALL_ITEMS, 
+  ADD_ALL_ITEMS, 
   GET_USER_ITEMS, 
   // SIGN_UP, 
   // SIGN_IN, 
