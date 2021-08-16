@@ -3,7 +3,9 @@ import {
   TURN_ON_EDIT,
   TURN_OFF_EDIT,
   POPULATE_ITEM_FORM,
-  CLEAR_CHOSEN_ITEM  
+  CLEAR_CHOSEN_ITEM,
+  GET_USER_ITEMS ,
+  CREATE_ITEM
 } from '../../actions/actiontypes'
 import { useDispatch, useSelector } from 'react-redux';
 import {Convert} from 'mongo-image-converter';
@@ -69,38 +71,41 @@ const ItemCreater = () => {
     
   }
   const handleEdit = async (e) => {
-    e.preventDefault()
-    console.log("name value>>",nameElement.value)
-    console.log("startingElement>>",startingElement.value)
-    console.log("buyoutElement value>>",buyoutElement.value)
-    console.log("descriptionElement value>>",descriptionElement.value)
-    console.log('these are supposed to be populated>>>', name, starting, buyout,itemDescription)
-    console.log("wanna edit", isEdit)
-    console.log("which one is missing", name, itemDescription, starting, buyout)
+    e.preventDefault();
     if(empty(nameElement.value) || empty(descriptionElement.value)|| empty(buyoutElement.value) || empty(startingElement.value) ) {
       console.log("missing fields")
       return alert("Missing required fields")  
-    }else if(parseFloat(starting) > parseFloat(buyout)){
+    }else if(parseFloat(startingElement.value) > parseFloat(buyoutElement.value)){
       console.log("starting higher")
-      return alert("Starting price can't be lower than buyout")
+      return alert("Starting price can't be higher than buyout")
     }else{
       try {
         const data = await {
           isEdit : isEdit,
-          name, 
-          itemDescription, 
-          buyout, 
-          starting
+          name: nameElement.value, 
+          description: descriptionElement.value, 
+          buyout: buyoutElement.value, 
+          starting: startingElement.value
         }
         console.log("supposed to post")
-        axios.post(
-          'http://localhost:5000/item/edit', data,
-          { headers: {'Authorization': localStorage.getItem ("id_token")}}, 
-          {withCredentials: true} 
+        axios.patch(
+          'http://localhost:5000/item/edit', 
+          data,
+          { headers: {
+            'Authorization': localStorage.getItem ("id_token")
+          }}, 
+          {withCredentials: true}
         ).then(res => {
           if(res.data.success){
             alert("Item is succesfully edited")
             console.log("item edited")
+            nameElement.value = ""
+            descriptionElement.value = ""
+            buyoutElement.value = null
+            startingElement.value = null
+            // dispatch({
+            //   type: GET_USER_ITEMS
+            // })
             dispatch({
               type: CLEAR_CHOSEN_ITEM
             })
@@ -112,9 +117,11 @@ const ItemCreater = () => {
         }).catch(error => {
           console.log("err in res", error)
           if(error.response.data.error){
+            console.log("error is handed here")
             return alert(error.response.data.error);
           }
-          alert("Please sign in to be able to create an item")
+          console.log("asdasd")
+          alert("An unknown error occured")
           return;
         })
       
@@ -133,7 +140,7 @@ const ItemCreater = () => {
       return alert("Missing required fields")  
     }else if(parseFloat(starting) > parseFloat(buyout)){
       console.log("starting higher")
-      return alert("Starting price can't be lower than buyout")
+      return alert("Starting price can't be higher than buyout")
     }else{
       console.log("posting to create")
       console.log(localStorage.getItem("id_token") !== undefined)
@@ -153,10 +160,15 @@ const ItemCreater = () => {
             'http://localhost:5000/item/create', data,
             { headers: {'Authorization': localStorage.getItem ("id_token")}}, 
             {withCredentials: true} 
-          ).then(res => {
+          ).then(async (res) => {
             if(res.data.success){
               alert("Item is succesfully created")
-              console.log("the necessary re-render will be handled with redux after the layout is done, profile.jsx will make another call to the database to retrieve all items, gonna add redux later")
+              console.log("created",res.data.itemData)
+              const { itemData } = res.data
+              dispatch({
+                type: CREATE_ITEM,
+                payload: itemData
+              })
               return;
             }
           }).catch(error => {

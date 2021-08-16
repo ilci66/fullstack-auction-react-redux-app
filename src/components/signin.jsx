@@ -16,14 +16,14 @@ const SignIn = () => {
       {withCredentials: true}
     )
     .then(async (res) => {
-      console.log("res >>", res.data)
+      console.log("res >>", res)
       const { expiresIn } = await res.data;
       const { token } = await res.data
       localStorage.removeItem("id_token");
       localStorage.removeItem("expires_at");
       const expiresAt = moment().add(Number.parseInt(expiresIn), 'days');
       localStorage.setItem('id_token', token);
-      localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()) );
+      localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
       // console.log("is success", res.data.success)
       if(res.data.success === true){ window.location = '/'}
     })

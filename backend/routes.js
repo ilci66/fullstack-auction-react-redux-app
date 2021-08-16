@@ -15,7 +15,7 @@ router.get('/items', (req, res) => {
 
 
 router.get('/user/items', passport.authenticate('jwt', { session: false }), (req, res) => {
-  console.log("getting items of username>>>", req.user.username)
+  // console.log("getting items of username>>>", req.user.username)
   Item.find({ created_by: req.user.username }, (err, data) => {
     if(err){
       res.status(400).json({ error: "an error occured while retrieving your items"})
@@ -34,14 +34,14 @@ router.get('/user/items', passport.authenticate('jwt', { session: false }), (req
 })
 
 router.post('/item/create', passport.authenticate('jwt', { session: false }), (req, res) => {
-  console.log('req.body in create >>', req.body)
-  console.log("created by >>>",req.user.username)
+  // console.log('req.body in create >>', req.body)
+  // console.log("created by >>>",req.user.username)
+  const { isEdit, image, name, itemDescription, buyout, starting} = req.body;
   if(empty(name) || empty(itemDescription) || empty(buyout) || empty(starting) || empty(image)){
     return res.status(400).json({error: "Missing required fields"})
   }
   // res.status(200).json({ success: true, message: "hey"})
   //checking the edit again here just to be sure
-  const { isEdit, image, name, itemDescription, buyout, starting} = req.body;
   if(!isEdit){
     Item.findOne({name: name}, async (err, data) => {
       if(err){
@@ -64,15 +64,15 @@ router.post('/item/create', passport.authenticate('jwt', { session: false }), (r
             res.status(400).json({ error: "an error occured while saving item"})
             return;
           }else{
+
             //I don't know why I didn't just use find one update but yeah
             User.findOne({ username: req.user.username }, (err, userData) => {
               userData.createdItems = [...userData.createdItems,data._id]
               userData.save((err, data) => {
-                res.status(200).json({ success: true, message: "succesfully created"})
+                res.status(200).json({ success: true, itemData: data})
                 return;
               })
             })
-            
           }
         })
       }
@@ -82,7 +82,6 @@ router.post('/item/create', passport.authenticate('jwt', { session: false }), (r
 
 router.get('/item/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
   //use this route to get one item in to later user for edit or bid request
-  console.log("reaches here", req.params.id)
   const { id } = req.params;
   Item.findById({ _id:id }, (err, data) => {
     if(err) {
@@ -98,9 +97,10 @@ router.get('/item/:id', passport.authenticate('jwt', { session: false }), (req, 
   })
 })
 
-router.patch('item/edit', passport.authenticate('jwt', { session: false }), (req, res) => { 
-  const { isEdit, name, itemDescription, buyout, starting} = req.body;
-  if(empty(name) || empty(itemDescription) || empty(buyout) || empty(starting)){
+router.patch('/item/edit', passport.authenticate('jwt', { session: false }), (req, res) => {
+  console.log("reaches here")
+  const { isEdit, name, description, buyout, starting} = req.body;
+  if(empty(name) || empty(description) || empty(buyout) || empty(starting)){
     return res.status(400).json({error: "Missing required fields"})
   }
   Item.findOneAndUpdate(
