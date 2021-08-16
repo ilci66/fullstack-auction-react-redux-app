@@ -5,7 +5,7 @@ import {
   POPULATE_ITEM_FORM,
   CLEAR_CHOSEN_ITEM,
   GET_USER_ITEMS ,
-  CREATE_ITEM
+  RE_RENDER_USER_ITEMS
 } from '../../actions/actiontypes'
 import { useDispatch, useSelector } from 'react-redux';
 import {Convert} from 'mongo-image-converter';
@@ -72,6 +72,8 @@ const ItemCreater = () => {
   }
   const handleEdit = async (e) => {
     e.preventDefault();
+    // handle scroll to the top
+    // window.scrollTo(0);
     if(empty(nameElement.value) || empty(descriptionElement.value)|| empty(buyoutElement.value) || empty(startingElement.value) ) {
       console.log("missing fields")
       return alert("Missing required fields")  
@@ -95,7 +97,7 @@ const ItemCreater = () => {
             'Authorization': localStorage.getItem ("id_token")
           }}, 
           {withCredentials: true}
-        ).then(res => {
+        ).then(async (res) => {
           if(res.data.success){
             alert("Item is succesfully edited")
             console.log("item edited")
@@ -103,9 +105,12 @@ const ItemCreater = () => {
             descriptionElement.value = ""
             buyoutElement.value = null
             startingElement.value = null
-            // dispatch({
-            //   type: GET_USER_ITEMS
-            // })
+            const { itemData } = await res.data
+            dispatch({
+              type:RE_RENDER_USER_ITEMS,
+              payload: itemData
+            })
+
             dispatch({
               type: CLEAR_CHOSEN_ITEM
             })
@@ -163,10 +168,10 @@ const ItemCreater = () => {
           ).then(async (res) => {
             if(res.data.success){
               alert("Item is succesfully created")
-              console.log("created",res.data.itemData)
+              console.log("created",res.data)
               const { itemData } = res.data
               dispatch({
-                type: CREATE_ITEM,
+                type: RE_RENDER_USER_ITEMS,
                 payload: itemData
               })
               return;

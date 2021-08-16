@@ -64,12 +64,26 @@ router.post('/item/create', passport.authenticate('jwt', { session: false }), (r
             res.status(400).json({ error: "an error occured while saving item"})
             return;
           }else{
-
             //I don't know why I didn't just use find one update but yeah
             User.findOne({ username: req.user.username }, (err, userData) => {
               userData.createdItems = [...userData.createdItems,data._id]
               userData.save((err, data) => {
-                res.status(200).json({ success: true, itemData: data})
+                // res.status(200).json({ success: true, message: "succesfully created"})
+                Item.find({ created_by: req.user.username }, (err, data) => {
+                  if(err){
+                    res.status(400).json({ error: "an error occured while retrieving your items"})
+                  }else{
+                    console.log("sending user items from api")
+                    res.status(200).json({
+                      success: true,
+                      username: req.user.username,
+                      email: req.user.email,
+                      createdAt: req.user.createdAt,
+                      createdItems: req.user.createdItems,
+                      itemData: data
+                    })
+                  }
+                })
                 return;
               })
             })
@@ -111,6 +125,7 @@ router.patch('/item/edit', passport.authenticate('jwt', { session: false }), (re
       buyout: buyout,
       starting: starting
     }, 
+    {new: true},
     async (err, data) => {
       if(err){
         res.status(400).json({ error: "an error occured when searching in database"})
@@ -119,7 +134,23 @@ router.patch('/item/edit', passport.authenticate('jwt', { session: false }), (re
         res.status(400).json({ error: "there is no data to edit in the database"})
       }else {
         console.log('item edited')
-        res.status(200).json({ success: true, message: "succesfully edited"})
+        // res.status(200).json({ success: true, message: "succesfully edited"})
+        Item.find({ created_by: req.user.username }, (err, data) => {
+          if(err){
+            res.status(400).json({ error: "an error occured while retrieving your items"})
+          }else{
+            console.log("sending user items from api")
+            res.status(200).json({
+              success: true,
+              username: req.user.username,
+              email: req.user.email,
+              createdAt: req.user.createdAt,
+              createdItems: req.user.createdItems,
+              itemData: data
+            })
+          }
+        })
+        return;
       }
     }
   )

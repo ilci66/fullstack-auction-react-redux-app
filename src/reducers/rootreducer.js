@@ -5,7 +5,7 @@ import {
   GET_USER_ITEMS, 
   // SIGN_UP, 
   // SIGN_IN, 
-  CREATE_ITEM, 
+  RE_RENDER_USER_ITEMS, 
   ADD_ITEM_TO_EDIT,
   EDIT_ITEM, 
   TURN_ON_EDIT,
@@ -87,9 +87,9 @@ const rootReducer = (state = initialState, action)=> {
         userItems: action.payload
       }
       break;
-    case CREATE_ITEM:
+    case RE_RENDER_USER_ITEMS:
       return {...state,
-        userItems: state.userItems.concat(action.payload)
+        userItems: action.payload
       }
     case TURN_ON_EDIT:
       return Object.assign({}, state, {isEdit: true})
