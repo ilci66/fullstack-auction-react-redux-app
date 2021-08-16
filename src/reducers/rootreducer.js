@@ -98,7 +98,7 @@ const rootReducer = (state = initialState, action)=> {
       return Object.assign({}, state, 
         { chosenItem: {
           //causing an error for now not touching image
-          // image: action.payload.image,
+          image: action.payload.image,
           name: action.payload.name,
           description: action.payload.description,
           starting: action.payload.starting,

@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {  
   TURN_ON_EDIT,
   TURN_OFF_EDIT,
-  POPULATE_ITEM_FORM  
+  POPULATE_ITEM_FORM,
+  CLEAR_CHOSEN_ITEM  
 } from '../../actions/actiontypes'
 import { useDispatch, useSelector } from 'react-redux';
 import {Convert} from 'mongo-image-converter';
@@ -28,29 +29,13 @@ const ItemCreater = () => {
 
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
-  const [itemDescription, setIemDescription] = useState("");
+  const [itemDescription, setItemDescription] = useState("");
   const [buyout, setBuyout] = useState(undefined);
   const [starting, setStarting] = useState(undefined);
 
   console.log("is edit from store >>>", isEdit)
 
-  // useEffect(() => {
-  //   dispatch({
-  //     type: TURN_ON_EDIT
-  //   }) 
-  //   dispatch({
-  //     type: TURN_off_EDIT
-  //   })
-  // },[])
-
   useEffect(() => {
-    //it doesn't recoginize the first tunring on of the edit
-    //activates in the second time it turns on 
-    // gonna find a way to fix it
-    
-    //instead of looking for edit changes look for chosen 
-    // item changes and clear the chosen item after cance 
-    // and create 
     if(!chosenItem.name==""){
       // imageElement.value = ""
       nameElement.value = ""
@@ -73,16 +58,73 @@ const ItemCreater = () => {
     dispatch({
       type: TURN_OFF_EDIT,
     })
-
-    imageElement.value = ""
+    dispatch({
+      type: CLEAR_CHOSEN_ITEM
+    })
+    // imageElement.value = ""
     nameElement.value = ""
     descriptionElement.value = ""
     buyoutElement.value = null
     startingElement.value = null
-
+    
+  }
+  const handleEdit = async (e) => {
+    e.preventDefault()
+    console.log("name value>>",nameElement.value)
+    console.log("startingElement>>",startingElement.value)
+    console.log("buyoutElement value>>",buyoutElement.value)
+    console.log("descriptionElement value>>",descriptionElement.value)
+    console.log('these are supposed to be populated>>>', name, starting, buyout,itemDescription)
+    console.log("wanna edit", isEdit)
+    console.log("which one is missing", name, itemDescription, starting, buyout)
+    if(empty(nameElement.value) || empty(descriptionElement.value)|| empty(buyoutElement.value) || empty(startingElement.value) ) {
+      console.log("missing fields")
+      return alert("Missing required fields")  
+    }else if(parseFloat(starting) > parseFloat(buyout)){
+      console.log("starting higher")
+      return alert("Starting price can't be lower than buyout")
+    }else{
+      try {
+        const data = await {
+          isEdit : isEdit,
+          name, 
+          itemDescription, 
+          buyout, 
+          starting
+        }
+        console.log("supposed to post")
+        axios.post(
+          'http://localhost:5000/item/edit', data,
+          { headers: {'Authorization': localStorage.getItem ("id_token")}}, 
+          {withCredentials: true} 
+        ).then(res => {
+          if(res.data.success){
+            alert("Item is succesfully edited")
+            console.log("item edited")
+            dispatch({
+              type: CLEAR_CHOSEN_ITEM
+            })
+            dispatch({
+              type: TURN_OFF_EDIT
+            })
+            return;
+          }
+        }).catch(error => {
+          console.log("err in res", error)
+          if(error.response.data.error){
+            return alert(error.response.data.error);
+          }
+          alert("Please sign in to be able to create an item")
+          return;
+        })
+      
+      }catch(error){
+        console.log(error)
+      }
+    }
   }
 
-  const handleCreateEdit = async (e) => {
+  const handleCreate = async (e) => {
     e.preventDefault()
     console.log("submit")
     // console.log(parseFloat(buyout), typeof starting)
@@ -135,16 +177,16 @@ const ItemCreater = () => {
   return(
     <div>
     <h2>{isEdit ? "Edit" : "Create"} An Item</h2>
-    <form className="w-80 mx-auto mt-4" onSubmit={handleCreateEdit}>
+    <form className="w-80 mx-auto mt-4" onSubmit={!isEdit ? handleCreate: handleEdit}>
     <div className="form-group mb-1">
-        <input 
+        {!isEdit ? <input 
           type="file" 
           className="form-control" 
           id="imageture" 
           accept="image/jpeg, image/png" 
           onChange={(e) => setImage(e.target.files[0])}
-        />
-        <label for="imageture"></label>
+        />: <img src={chosenItem.image} width="90%" height="90%"></img>}
+        <label htmlFor="imageture"></label>
       </div>
       <div className="form-group form-floating mb-3">
         <input 
@@ -164,7 +206,7 @@ const ItemCreater = () => {
           required
           type="text" 
           className="form-control" 
-          onChange={(e) => setIemDescription(e.target.value)} 
+          onChange={(e) => setItemDescription(e.target.value)} 
           id="floatingDescription" 
           placeholder="A cool sword from 1700"/>
         <label for="floatingDescription">Description</label>
@@ -191,7 +233,7 @@ const ItemCreater = () => {
           onChange={(e) => setBuyout(e.target.value)} />
         <label for="floatingBuyout">Buyout (<b>$</b>)</label>
       </div>
-      <button type="submit" className="btn btn-lg btn-outline-success mx-auto w-100">Create</button>
+      <button type="submit" className="btn btn-lg btn-outline-success mx-auto w-100">{!isEdit ? "Create" : "Edit"}</button>
     </form>
     <button className="btn btn-lg btn-outline-danger mx-auto mt-3 w-100" onClick={handleCancel}>Cancel</button>
     </div>

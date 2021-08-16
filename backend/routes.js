@@ -6,6 +6,7 @@ const passport = require('passport');
 const User = require('./models/user.js');
 const Item = require('./models/item.js');
 const utils = require('./utils')
+const empty = require('is-empty')
 
 router.get('/items', (req, res) => {
   
@@ -35,7 +36,11 @@ router.get('/user/items', passport.authenticate('jwt', { session: false }), (req
 router.post('/item/create', passport.authenticate('jwt', { session: false }), (req, res) => {
   console.log('req.body in create >>', req.body)
   console.log("created by >>>",req.user.username)
+  if(empty(name) || empty(itemDescription) || empty(buyout) || empty(starting) || empty(image)){
+    return res.status(400).json({error: "Missing required fields"})
+  }
   // res.status(200).json({ success: true, message: "hey"})
+  //checking the edit again here just to be sure
   const { isEdit, image, name, itemDescription, buyout, starting} = req.body;
   if(!isEdit){
     Item.findOne({name: name}, async (err, data) => {
@@ -72,27 +77,6 @@ router.post('/item/create', passport.authenticate('jwt', { session: false }), (r
         })
       }
     })
-  }else{
-    Item.findOneAndUpdate(
-      {name: name}, 
-      {
-        image: image, 
-        name: name, 
-        description: description, 
-        buyout: buyout,
-        starting: starting
-      }, 
-      async (err, data) => {
-        if(err){
-          res.status(400).json({ error: "an error occured when searching in database"})
-          return;
-        }else if(!data){
-          res.status(400).json({ error: "there is no data to edit in the database"})
-        }else {
-          res.status(200).json({ success: true, message: "succesfully edited"})
-        }
-      }
-    )
   }
 })
 
@@ -114,8 +98,31 @@ router.get('/item/:id', passport.authenticate('jwt', { session: false }), (req, 
   })
 })
 
-router.patch('item/edit', passport.authenticate('jwt', { session: false }), (req, res) => {
-  //gonna modify create route and handle edit here 
+router.patch('item/edit', passport.authenticate('jwt', { session: false }), (req, res) => { 
+  const { isEdit, name, itemDescription, buyout, starting} = req.body;
+  if(empty(name) || empty(itemDescription) || empty(buyout) || empty(starting)){
+    return res.status(400).json({error: "Missing required fields"})
+  }
+  Item.findOneAndUpdate(
+    {name: name}, 
+    {
+      name: name, 
+      description: description, 
+      buyout: buyout,
+      starting: starting
+    }, 
+    async (err, data) => {
+      if(err){
+        res.status(400).json({ error: "an error occured when searching in database"})
+        return;
+      }else if(!data){
+        res.status(400).json({ error: "there is no data to edit in the database"})
+      }else {
+        console.log('item edited')
+        res.status(200).json({ success: true, message: "succesfully edited"})
+      }
+    }
+  )
 });
 
 
