@@ -51,7 +51,8 @@ const initialState = {
     description: "",
     starting: "",
     buyout: "",
-    createdAt: ""
+    createdAt: "",
+    updatedAt: ""
   }
 }
 
@@ -127,7 +128,8 @@ const rootReducer = (state = initialState, action)=> {
           description: action.payload.description,
           starting: action.payload.starting,
           buyout: action.payload.buyout,
-          createdAt: action.payload.createdAt
+          createdAt: action.payload.createdAt,
+          updatedAt: action.payload.updatedAt
           }
         }
       )
@@ -141,7 +143,8 @@ const rootReducer = (state = initialState, action)=> {
           description: "",
           starting: "",
           buyout: "",
-          createdAt: ""
+          createdAt: "",
+          updatedAt: ""
           }
         }
       )

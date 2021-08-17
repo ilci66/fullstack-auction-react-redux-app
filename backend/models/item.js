@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const bidSchema = new mongoose.Schema({
   bidder: String,
-  bid: String
+  amount: String
 }, {timestamps:true});
 
 const itemSchema = new mongoose.Schema({
@@ -13,7 +13,8 @@ const itemSchema = new mongoose.Schema({
   buyout: String,
   starting: String,
   created_by: String,
-  isBid: {type: Boolean, default: false, index:true},
+  //didn't use it anywhere, unnecessary at this point
+  // isBid: {type: Boolean, default: false, index:true},
   bids: [bidSchema]
 }, {timestamps: true});
 

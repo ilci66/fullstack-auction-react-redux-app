@@ -110,8 +110,8 @@ router.get('/item/:id', passport.authenticate('jwt', { session: false }), (req, 
       console.log("no item in database")
       res.status(400).json({error: "can't find the item"})
     } else {
-      console.log("actually sending the data")
-      res.status(200).json({ success: true, itemData: data})
+      console.log("actually sending the data", data)
+      res.status(200).json({ success: true, user: req.user ,itemData: data})
     }
   })
 })
@@ -163,7 +163,16 @@ router.patch('/item/edit', passport.authenticate('jwt', { session: false }), (re
 
 
 router.get('/item/bid', passport.authenticate('jwt', { session: false }), (req, res) => {
-  
+  const { id, username, amount } = req.body;
+  Item.findById({ id }, (err, data) => {
+    if(err){
+      res.status(400).json({error: "an error occured in database"})
+    } else if(!data){
+      res.status(400).json({error: "no such item in database"})
+    } else {
+      data.bids.push({ bidder: username, amount: amount})
+    }
+  })
 });
 
 router.delete('item/delete',  passport.authenticate('jwt', { session: false }), (req, res) => {
