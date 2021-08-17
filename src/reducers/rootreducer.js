@@ -2,7 +2,9 @@ import {
   MAKE_REQUEST,
   GET_USER_INFO,  
   ADD_ALL_ITEMS, 
-  GET_USER_ITEMS, 
+  GET_USER_ITEMS,
+  TURN_OFF_LOADING,
+  TURN_ON_LOADING,
   // SIGN_UP, 
   // SIGN_IN, 
   RE_RENDER_USER_ITEMS, 
@@ -43,6 +45,7 @@ const initialState = {
   },
   isEdit: false,
   chosenItem:{ 
+    bids:[],
     image: "",
     name: "",
     description: "",
@@ -57,6 +60,16 @@ const rootReducer = (state = initialState, action)=> {
   switch(action.type){
     case MAKE_REQUEST:
       makeRequest()
+      break;
+    case TURN_ON_LOADING:
+      return {...state,
+        loading: true,
+      }
+      break;
+    case TURN_OFF_LOADING:
+      return {...state,
+        loading: false,
+      }
       break;
     case GET_USER_INFO:
       // console.log("palyoad  to get user info", action.payload)
@@ -104,10 +117,11 @@ const rootReducer = (state = initialState, action)=> {
       return Object.assign({}, state, {isEdit: false})
       break;
     case ADD_ITEM_TO_EDIT:
-      console.log("populate dispatch successful")
+      console.log("bids of chosen >>>", action.payload.bids)
       return Object.assign({}, state, 
         { chosenItem: {
           //causing an error for now not touching image
+          bids: action.payload.bids,
           image: action.payload.image,
           name: action.payload.name,
           description: action.payload.description,
