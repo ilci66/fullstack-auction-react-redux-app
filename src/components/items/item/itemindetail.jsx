@@ -10,7 +10,11 @@ const ItemInDetail = () => {
   const dispatch = useDispatch();
   const loading = useSelector(state => state.loading)
   const chosenItem = useSelector(state => state.chosenItem)
+  const [amount, setAmount] = useState(undefined)
   // const allItems = useSelector(state => state.allItems);
+
+  //make a request and send auth header, amount, user and item id to the route,
+  //that's it for today
 
   useEffect(() => {
     dispatch({ type: "TURN ON LOADING" })
@@ -47,24 +51,28 @@ const ItemInDetail = () => {
       <img src={chosenItem.image} className="img-fluid" alt={chosenItem.name}></img>
       <h2>{chosenItem.name}</h2>
       <h5 className="mt-2">{chosenItem.description}</h5>
-      {
-        chosenItem.bids[0] ? 
-          "No bids on this item yet" :
+      <p>Starting Price: <b>{chosenItem.starting} $</b></p>
+      <p>Buyout Price: <b>{chosenItem.buyout} $</b></p>
+      {chosenItem.bids.length > 0 ? 
+          <p>No bids on this item yet</p> :
           <ul>
             {chosenItem.bids.reverse().map(bid => <li>{bid.amount}</li>)}
-          </ul>
-      }
+          </ul>}
       {chosenItem.updatedAt && <p>Updated <ReactTimeAgo date={chosenItem.updatedAt} /></p>}
-      <form>
-        <div className="form-row align-items-center">
-        </div>
-        <div className="col-auto my-1">
-          <button type="submit" className="btn btn-primary">Bid</button>
-        </div>
-      </form>
-      <div className="col-auto my-1">
-          <button className="btn btn-primary">Buyout</button>
+      
+      <form id="" className="mt-4">
+      <div className=" w-50 mx-auto form-group form-floating mb-3">
+        <input
+          type="number" 
+          step=".01"
+          className="form-control" 
+          id="floatingAmount"
+          placeholder="10"
+          onChange={(e) => setAmount(e.target.value)} />
+        <label for="floatingAmount">Bid (<b>$</b>)</label>
       </div>
+      <button type="submit" className="w-50 btn btn-lg btn-outline-success mx-auto">Bid</button>
+    </form>
       
     </div>
   )

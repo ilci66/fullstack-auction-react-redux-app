@@ -12,7 +12,7 @@ const NavBar = () => {
   return(
     <div>
       <div className="row">
-        <div className=" d-flex flex-column">
+        <div className="d-flex flex-column">
           <Navbar className="justify-content-around mb-5"  expand="md" sticky="top">
             <Navbar.Brand href="/" className="mx-3 p-2">HOME</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" className="mr-5 justify-content-around"/>
