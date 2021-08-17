@@ -17,7 +17,7 @@ const itemSchema = new mongoose.Schema({
   bids: [bidSchema]
 }, {timestamps: true});
 
-itemSchema.index({updatedAt: 1}, {expireAfterSeconds: 24*60*60,partialFilterExpression : {isBid: false}})
+itemSchema.index({ updatedAt: 1}, { expireAfterSeconds: 7*24*60*60, partialFilterExpression : {isBid: false} })
 
 const Item = mongoose.model('Item', itemSchema);
 module.exports = Item;

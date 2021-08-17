@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import ItemInDetail from './item/itemindetail';
+import Item from './item/item';
 import { ADD_ALL_ITEMS } from '../../actions/actiontypes'
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
@@ -18,10 +20,19 @@ TimeAgo.addLocale(ru)
 const Items = () => {
   // const [allItems, setAllItems] = useState(undefined);
   const [search, setSearch] = useState(undefined);
+  const dispatch = useDispatch()
+  const allItems = useSelector(state => state.allItems)
+  console.log(allItems);
 
   useEffect(() => {
     axios.get('http://localhost:5000/items')
-      .then(res => console.log("all ites", res.data.data))
+      .then(async (res) => {
+        const itemData = res.data.data
+        dispatch({
+          type:ADD_ALL_ITEMS,
+          payload: itemData
+        })
+      })
       .catch(error => console.log(error))
   }, [])
 
@@ -35,7 +46,14 @@ const Items = () => {
       <div className="form-inline w-50 mx-auto">
         <input type="text"  placeholder="Search" onChange={handleSearch} className="form-control mb-3 text-center w-30"></input>
       </div>
-
+      <div className="container">
+        <div className="row">
+            {allItems.map(item => {
+            return<Item item={item}/>
+          })}
+          
+        </div>
+      </div>
 
       {/* <Container>
         <Row>

@@ -33,6 +33,7 @@ import {
 //   userItems: "some Items"
 // }
 const initialState = {
+  allItems: [],
   userItems: [],
   loading: false,
   userInfo: {
@@ -85,6 +86,11 @@ const rootReducer = (state = initialState, action)=> {
       // }
       return {...state,
         userItems: action.payload
+      }
+      break;
+    case ADD_ALL_ITEMS:
+      return {...state,
+        allItems: action.payload
       }
       break;
     case RE_RENDER_USER_ITEMS:
