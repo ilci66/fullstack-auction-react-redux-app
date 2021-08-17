@@ -1,5 +1,7 @@
 //write the action types here for later exporting to prevent odd errors
 
+export const TURN_ON_LOADING = "TURN ON LOADING"
+export const TURN_OFF_LOADING = "TURN OFF LOADING"
 export const MAKE_REQUEST = "MAKE REQUEST";
 export const GET_USER_INFO = "GET USER INFO";
 export const SIGN_UP = "SIGN UP";

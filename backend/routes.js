@@ -18,8 +18,6 @@ router.get('/items', (req, res) => {
   })
 });
 
-
-
 router.get('/user/items', passport.authenticate('jwt', { session: false }), (req, res) => {
   // console.log("getting items of username>>>", req.user.username)
   Item.find({ created_by: req.user.username }, (err, data) => {
@@ -103,6 +101,7 @@ router.post('/item/create', passport.authenticate('jwt', { session: false }), (r
 router.get('/item/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
   //use this route to get one item in to later user for edit or bid request
   const { id } = req.params;
+  console.log(id)
   Item.findById({ _id:id }, (err, data) => {
     if(err) {
       console.log("error in loooking for the item")

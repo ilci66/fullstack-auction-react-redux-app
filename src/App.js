@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, useRouteMatch, useParams } from
 //keep the in src
 import Items from './components/items/items'
 import Item from './components/items/item/item';
+import ItemInDetail from './components/items/item/itemindetail';
 import Signin from './components/signin';
 import Signup from './components/signup';
 import NavBar from './components/navbar';
@@ -30,9 +31,9 @@ function App() {
           <Route exact path='/'>
             <Home />
           </Route>
-          <Route path="/items/:itemid">
+          <Route path="/item/:itemid">
             <NavBar />
-            <Item />
+            <ItemInDetail />
           </Route>
           <Route exact path="/profile">
             <NavBar />

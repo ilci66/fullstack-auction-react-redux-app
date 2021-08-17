@@ -3,8 +3,15 @@ import ReactTimeAgo from 'react-time-ago'
 import axios from 'axios';
 
 const Item = ({item}) => {
+
+  const handleSeeMore = (e) => {
+    // console.log(e.target.parentNode.parentNode.parentNode.id)
+    const targetId = e.target.parentNode.parentNode.parentNode.id
+    window.location = `item/${targetId}`;
+  }
+
   return(
-    <div className="col d-flex mb-3" key={item._id} id={item._id} >
+    <div id={item._id} className="col d-flex mb-3" key={item._id}>
       <div className="card">
         <img src={item.image} className="card-img-top"></img>
         <div className="card-body">
@@ -22,10 +29,8 @@ const Item = ({item}) => {
         </div>
         <div className="card-footer">
           Highest Bid: {item.bid ? `${item.bid[-1]} $` : "No bid so far"}
-          <div className="d-flex mt-2">
-            <div className="btn w-100 btn-lg btn-outline-success mx-auto">See More</div>
+          <div onClick={handleSeeMore} className="d-flex mt-2 btn w-100 btn-lg btn-outline-success mx-auto">See More</div>
           </div>
-        </div>
       </div>
     </div>
   )
