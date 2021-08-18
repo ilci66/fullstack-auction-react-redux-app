@@ -14,11 +14,11 @@ const itemSchema = new mongoose.Schema({
   starting: String,
   created_by: String,
   //didn't use it anywhere, unnecessary at this point
-  // isBid: {type: Boolean, default: false, index:true},
+  isBid: {type: Boolean, default: false, index:true},
   bids: [bidSchema]
 }, {timestamps: true});
 
-itemSchema.index({ updatedAt: 1}, { expireAfterSeconds: 7*24*60*60, partialFilterExpression : {isBid: false} })
+itemSchema.index({ createdAt: 1}, { expireAfterSeconds: 7*24*60*60, partialFilterExpression : {isBid: false} })
 
 const Item = mongoose.model('Item', itemSchema);
 module.exports = Item;

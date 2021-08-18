@@ -177,6 +177,7 @@ router.post('/item/bid', passport.authenticate('jwt', { session: false }), (req,
     } else {
       console.log("bid placed")
       data.bids.push({ bidder: username, amount: amount})
+      data.isBid = true
       data.save((err, savedData) => {
         if(err){
           console.log("save error")
@@ -184,7 +185,7 @@ router.post('/item/bid', passport.authenticate('jwt', { session: false }), (req,
           return;
         } else {
           console.log("savedData", savedData.bids)
-          res.status(400).json({ success: true, data: savedData})
+          res.status(200).json({ success: true, data: savedData})
           return;
         }
       })
@@ -194,7 +195,17 @@ router.post('/item/bid', passport.authenticate('jwt', { session: false }), (req,
 
 router.delete('item/delete',  passport.authenticate('jwt', { session: false }), (req, res) => {
   console.log("delete backend")
-
+  const { id } = req.body
+  //need to find the item by name and delete if isBid is false 
+  Item.findOneAndRemove({ _id: id, isBid: false}, (err, data) => {
+    if(!data || err){
+      res.status(400).json({ error: "an error occured while removing item"})
+      return 
+    }else{
+      res.status(200).json({ success: true, message: "removed item successfuly"})
+      return
+    }
+  })
 })
 
 

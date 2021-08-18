@@ -53,7 +53,7 @@ const SignIn = () => {
             </input>
           </div>
           <div className="form-group" className="form-group w-50 mx-auto mt-4 mb-2">
-          <label htmlFor="password">Email</label>
+          <label htmlFor="password">Password</label>
           <input
             name="password"
             type="password"

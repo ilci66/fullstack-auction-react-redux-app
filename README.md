@@ -4,5 +4,5 @@
 * For styling I used css, bootstrap and react-bootstrap. I could just stick to one but I want to be comfortable using multiple methods.
 * Probably gonna deploy the app once it's finished to heroku or netflify.
 * A link to the live app will be provided here.
-* Items created by the users will be deleted in 7 days if nobody bids on them, editing or bidding on the items resets countdown.
+* Items created by the users will be deleted in 7 days if nobody bids on them, bidding on the items cancels countdown.
 * The user will be able to edit the item if as long as no bidding has occured, to make it more appealing or maybe just to correct a typo.

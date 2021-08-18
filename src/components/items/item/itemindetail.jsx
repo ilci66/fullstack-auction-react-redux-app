@@ -12,29 +12,48 @@ const ItemInDetail = () => {
   const chosenItem = useSelector(state => state.chosenItem)
   const [amount, setAmount] = useState(undefined)
   // const allItems = useSelector(state => state.allItems);
-
+  // console.log(chosenItem.bids["0"])
   //make a request and send auth header, amount, user and item id to the route,
   //that's it for today
   const handleBid = async (e) => {
     e.preventDefault();
+    if(parseFloat(amount) < parseFloat(chosenItem.starting)){
+      alert("you can't bid lower than the starting price!")
+      return;
+    }else if(parseFloat(amount) >= parseFloat(chosenItem.buyout)){
+      alert("you can't bid more than the buyout price")
+      return;
+    }
+
+    const filtered = await chosenItem.bids.filter(bid => parseFloat(bid.amount) >= parseFloat(amount)) 
+     if(filtered.length > 0){
+        alert("your bid can't be lower than or equal to the highest bid")
+      return;
+    }
     const data = {
       amount,
       id: chosenItem.id
     }
-    console.log("data to send", data)
-    console.log("id token", localStorage.getItem("id_token"))
+    // console.log("data to send", data)
+    // console.log("id token", localStorage.getItem("id_token"))
     axios.post(
       'http://localhost:5000/item/bid', data,
       { headers: {'Authorization': localStorage.getItem("id_token")}}, 
       {withCredentials: true} 
     )
-      .then(res => console.log(res))
+      .then(async (res) => {
+        const itemData = await res.data.data
+        dispatch({
+          type: "ADD ITEM TO EDIT",
+          payload: itemData
+        })  
+        console.log(res.data.data)
+      })
       .catch(error => {
-        console.log('something wrong')
+        // console.log('something wrong')
         console.log(error)
       })
   }
-
   useEffect(() => {
     dispatch({ type: "TURN ON LOADING" })
     axios.get(`http://localhost:5000/item/${itemid}`,
@@ -54,13 +73,10 @@ const ItemInDetail = () => {
         type: "ADD ITEM TO EDIT",
         payload: itemData
       })
-      
       dispatch({ type: "TURN OFF LOADING" })
-
     })
     .catch(error => {
       dispatch({ type: "TURN OFF LOADING" })
-      console.log("caught the error here", error)
     })
   }, [])
 
@@ -72,16 +88,18 @@ const ItemInDetail = () => {
       <h5 className="mt-2">{chosenItem.description}</h5>
       <p>Starting Price: <b>{chosenItem.starting} $</b></p>
       <p>Buyout Price: <b>{chosenItem.buyout} $</b></p>
-      {chosenItem.bids.length > 0 ? 
+      {chosenItem.bids.length === 0 ? 
           <p>No bids on this item yet</p> :
-          <ul>
-            {chosenItem.bids.reverse().map(bid => <li>{bid.amount}</li>)}
+          <ul className="list-group list-group-flush">
+            {chosenItem.bids.map(bid => <li className="list-group-item">Bidder: <b>{bid.bidder}</b>, Amount: <b>{bid.amount}</b> $, <b><ReactTimeAgo date={bid.createdAt} /></b></li>)}
+            
           </ul>}
       {chosenItem.updatedAt && <p>Updated <ReactTimeAgo date={chosenItem.updatedAt} /></p>}
       
     <form onSubmit={handleBid} className="mt-4">
       <div className=" w-50 mx-auto form-group form-floating mb-3">
         <input
+          required
           type="number" 
           step=".01"
           className="form-control" 
