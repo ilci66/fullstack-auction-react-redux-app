@@ -15,6 +15,25 @@ const ItemInDetail = () => {
 
   //make a request and send auth header, amount, user and item id to the route,
   //that's it for today
+  const handleBid = async (e) => {
+    e.preventDefault();
+    const data = {
+      amount,
+      id: chosenItem.id
+    }
+    console.log("data to send", data)
+    console.log("id token", localStorage.getItem("id_token"))
+    axios.post(
+      'http://localhost:5000/item/bid', data,
+      { headers: {'Authorization': localStorage.getItem("id_token")}}, 
+      {withCredentials: true} 
+    )
+      .then(res => console.log(res))
+      .catch(error => {
+        console.log('something wrong')
+        console.log(error)
+      })
+  }
 
   useEffect(() => {
     dispatch({ type: "TURN ON LOADING" })
@@ -60,7 +79,7 @@ const ItemInDetail = () => {
           </ul>}
       {chosenItem.updatedAt && <p>Updated <ReactTimeAgo date={chosenItem.updatedAt} /></p>}
       
-      <form id="" className="mt-4">
+    <form onSubmit={handleBid} className="mt-4">
       <div className=" w-50 mx-auto form-group form-floating mb-3">
         <input
           type="number" 

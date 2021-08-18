@@ -101,7 +101,7 @@ router.post('/item/create', passport.authenticate('jwt', { session: false }), (r
 router.get('/item/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
   //use this route to get one item in to later user for edit or bid request
   const { id } = req.params;
-  console.log(id)
+  // console.log(id)
   Item.findById({ _id:id }, (err, data) => {
     if(err) {
       console.log("error in loooking for the item")
@@ -110,7 +110,7 @@ router.get('/item/:id', passport.authenticate('jwt', { session: false }), (req, 
       console.log("no item in database")
       res.status(400).json({error: "can't find the item"})
     } else {
-      console.log("actually sending the data", data)
+      // console.log("actually sending the data", data)
       res.status(200).json({ success: true, user: req.user ,itemData: data})
     }
   })
@@ -162,15 +162,32 @@ router.patch('/item/edit', passport.authenticate('jwt', { session: false }), (re
 });
 
 
-router.get('/item/bid', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { id, username, amount } = req.body;
-  Item.findById({ id }, (err, data) => {
+router.post('/item/bid', passport.authenticate('jwt', { session: false }), (req, res) => {
+  // console.log("in bid" ,req.user)
+  const { username } = req.user;
+  const { id, amount } = req.body;
+  console.log(username, id, amount)
+  Item.findOne({ _id: id }, (err, data) => {
     if(err){
       res.status(400).json({error: "an error occured in database"})
+      return;
     } else if(!data){
       res.status(400).json({error: "no such item in database"})
+      return;
     } else {
+      console.log("bid placed")
       data.bids.push({ bidder: username, amount: amount})
+      data.save((err, savedData) => {
+        if(err){
+          console.log("save error")
+          res.status(400).json({error: "an error occured while saving"})
+          return;
+        } else {
+          console.log("savedData", savedData.bids)
+          res.status(400).json({ success: true, data: savedData})
+          return;
+        }
+      })
     }
   })
 });

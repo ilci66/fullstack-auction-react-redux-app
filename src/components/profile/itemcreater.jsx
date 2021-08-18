@@ -167,7 +167,7 @@ const ItemCreater = () => {
           console.log("supposed to post")
           axios.post(
             'http://localhost:5000/item/create', data,
-            { headers: {'Authorization': localStorage.getItem ("id_token")}}, 
+            { headers: {'Authorization': localStorage.getItem("id_token")}}, 
             {withCredentials: true} 
           ).then(async (res) => {
             if(res.data.success){

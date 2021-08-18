@@ -45,6 +45,7 @@ const initialState = {
   },
   isEdit: false,
   chosenItem:{ 
+    id: "",
     bids:[],
     image: "",
     name: "",
@@ -122,6 +123,7 @@ const rootReducer = (state = initialState, action)=> {
       return Object.assign({}, state, 
         { chosenItem: {
           //causing an error for now not touching image
+          id: action.payload._id,
           bids: action.payload.bids,
           image: action.payload.image,
           name: action.payload.name,
