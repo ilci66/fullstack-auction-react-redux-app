@@ -59,6 +59,7 @@ const UserItems = () => {
   // console.log("user items from store>>", userItems)
 
   const handleEdit = (e) => {
+    //this one chooses the item to edit from user items
     const targetId = e.target.parentNode.parentNode.parentNode.parentNode.id
     console.log("searching with by this id" ,targetId)
     dispatch({
@@ -89,13 +90,21 @@ const UserItems = () => {
       
   }
   
-  const handleDelete = (e) => {
-    const targetId = e.target.parentNode.parentNode.parentNode.parentNode.id
-    console.log(targetId)
-    dispatch({
-      type: DELETE_ITEM,
-      payload: targetId
-    })
+  const handleDelete = async (e) => {
+    const data = { id: e.target.parentNode.parentNode.parentNode.parentNode.id }
+    console.log("data", data, localStorage.getItem ("id_token"))
+    axios.delete(
+      'http://localhost:5000/item/delete', data,
+      { headers: {
+        'Authorization': localStorage.getItem ("id_token")
+      }}, 
+      {withCredentials: true}
+    ).then(res => {
+      dispatch({
+        type: "RE RENDER USER ITEMS"
+      })
+    }).catch(error => console.log(error))
+    
   };
 
   // console.log(userData)
@@ -111,7 +120,7 @@ const UserItems = () => {
         You have {userItems.length == 1 ? "1 active item" : `${userItems.length} active items`} 
       </p>
       <div className="container">
-        <div className="row row-cols-1 row-cols-md-3 g-4">
+        <div className="row row-cols-1 row-cols-md-3 g-4 mx-auto">
             {
               userItems.map(item => {
                 {/* gave the id={item.name} to the container div here */}

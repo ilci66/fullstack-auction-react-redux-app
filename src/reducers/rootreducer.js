@@ -154,7 +154,7 @@ const rootReducer = (state = initialState, action)=> {
       console.log('editing in reducer')
       break;
     case DELETE_ITEM:
-      deleteItem(action.payload)
+      
       console.log("wanna delete using dispatch and stuff", action.payload)
       break;
     

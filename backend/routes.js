@@ -24,7 +24,7 @@ router.get('/user/items', passport.authenticate('jwt', { session: false }), (req
     if(err){
       res.status(400).json({ error: "an error occured while retrieving your items"})
     }else{
-      console.log("sending user items from api")
+      // console.log("sending user items from api")
       res.status(200).json({
         success: true,
         username: req.user.username,
@@ -37,15 +37,21 @@ router.get('/user/items', passport.authenticate('jwt', { session: false }), (req
   })
 })
 
+//for some reason I keep getting 401 error, looking for the reason
+// router.delete('/item/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.delete('/item/delete', (req, res) => {
+
+  console.log("delete backend")
+  const { id } = req.body
+  //need to find the item by name and delete if isBid is false 
+  
+})
+
 router.post('/item/create', passport.authenticate('jwt', { session: false }), (req, res) => {
-  // console.log('req.body in create >>', req.body)
-  // console.log("created by >>>",req.user.username)
   const { isEdit, image, name, itemDescription, buyout, starting} = req.body;
   if(empty(name) || empty(itemDescription) || empty(buyout) || empty(starting) || empty(image)){
     return res.status(400).json({error: "Missing required fields"})
   }
-  // res.status(200).json({ success: true, message: "hey"})
-  //checking the edit again here just to be sure
   if(!isEdit){
     Item.findOne({name: name}, async (err, data) => {
       if(err){
@@ -68,21 +74,18 @@ router.post('/item/create', passport.authenticate('jwt', { session: false }), (r
             res.status(400).json({ error: "an error occured while saving item"})
             return;
           }else{
-            //I don't know why I didn't just use find one update but yeah
             User.findOne({ username: req.user.username }, (err, userData) => {
               userData.createdItems = [...userData.createdItems,data._id]
               userData.save((err, data) => {
-                // res.status(200).json({ success: true, message: "succesfully created"})
                 Item.find({ created_by: req.user.username }, (err, data) => {
                   if(err){
                     res.status(400).json({ error: "an error occured while retrieving your items"})
                   }else{
-                    console.log("sending user items from api")
                     res.status(200).json({
                       success: true,
                       username: req.user.username,
                       email: req.user.email,
-                      createdAt: req.user.createdAt,
+                      createdAt: req.user.createdAt, 
                       createdItems: req.user.createdItems,
                       itemData: data
                     })
@@ -116,9 +119,11 @@ router.get('/item/:id', passport.authenticate('jwt', { session: false }), (req, 
   })
 })
 
+
 router.patch('/item/edit', passport.authenticate('jwt', { session: false }), (req, res) => {
   console.log("reaches here")
   const { isEdit, name, description, buyout, starting} = req.body;
+  console.log("edit ? >>", isEdit)
   if(empty(name) || empty(description) || empty(buyout) || empty(starting)){
     return res.status(400).json({error: "Missing required fields"})
   }
@@ -193,20 +198,7 @@ router.post('/item/bid', passport.authenticate('jwt', { session: false }), (req,
   })
 });
 
-router.delete('item/delete',  passport.authenticate('jwt', { session: false }), (req, res) => {
-  console.log("delete backend")
-  const { id } = req.body
-  //need to find the item by name and delete if isBid is false 
-  Item.findOneAndRemove({ _id: id, isBid: false}, (err, data) => {
-    if(!data || err){
-      res.status(400).json({ error: "an error occured while removing item"})
-      return 
-    }else{
-      res.status(200).json({ success: true, message: "removed item successfuly"})
-      return
-    }
-  })
-})
+
 
 
 
