@@ -11,6 +11,8 @@ import NavBar from './components/navbar';
 import Profile from './components/profile/profile';
 import Sidebar from './components/sidebar';
 import Home from './components/home'
+import Success from './components/paymentsuccess';
+import Fail from './components/paymentfail'
 
 
 import './App.css';
@@ -38,6 +40,12 @@ function App() {
           <Route exact path="/profile">
             <NavBar />
             <Profile />
+          </Route>
+          <Route exact path="/payment-success">
+            <Success />
+          </Route>
+          <Route exact path="/payment-fail">
+            <Fail />
           </Route>
         </Switch>
       </Router>
