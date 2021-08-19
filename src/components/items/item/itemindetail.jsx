@@ -81,19 +81,18 @@ const ItemInDetail = () => {
   }, [])
 
   return(
-    <div>
+    <div className="mb-5">
       <h2>{loading && "Loading..."}</h2>
       <img src={chosenItem.image} className="img-fluid" alt={chosenItem.name}></img>
       <h2>{chosenItem.name}</h2>
       <h5 className="mt-2">{chosenItem.description}</h5>
-      <p>Starting Price: <b>{chosenItem.starting} $</b></p>
+      <p className="w-60">Starting Price: <b>{chosenItem.starting} $</b></p>
       <p>Buyout Price: <b>{chosenItem.buyout} $</b></p>
       {chosenItem.bids.length === 0 ? 
           <p>No bids on this item yet</p> :
-          <ul className="list-group list-group-flush">
-            {chosenItem.bids.map(bid => <li className="list-group-item">Bidder: <b>{bid.bidder}</b>, Amount: <b>{bid.amount}</b> $, <b><ReactTimeAgo date={bid.createdAt} /></b></li>)}
-            
-          </ul>}
+            <ul className="list-group list-group-flush">
+              {chosenItem.bids.map(bid => <li className="list-group-item">Bidder: <b>{bid.bidder}</b>, Amount: <b>{bid.amount}</b> $, <b><ReactTimeAgo date={bid.createdAt} /></b></li>)}
+            </ul>}
       {chosenItem.updatedAt && <p>Updated <ReactTimeAgo date={chosenItem.updatedAt} /></p>}
       
     <form onSubmit={handleBid} className="mt-4">
@@ -110,7 +109,7 @@ const ItemInDetail = () => {
       </div>
       <button type="submit" className="w-50 btn btn-lg btn-outline-success mx-auto">Bid</button>
     </form>
-      
+    <button className="mt-3 w-50 btn btn-lg btn-outline-primary mx-auto">Buyout The Item</button>
     </div>
   )
 };

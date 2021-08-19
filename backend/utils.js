@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const validator = require('validator');
 const empty = require('is-empty');
+const Item = require(('./models/item'))
 
 //Necessary for issuing the jwt
 const pathToKey = path.join(__dirname, 'id_rsa_priv.pem')
@@ -12,6 +13,28 @@ const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
 // console.log(PRIV_KEY)
 
 //helper functions
+
+// const findUserItems = (username, email, createdAt, createdItems) => {
+// const findUserItems = (username) => {
+//   Item.find({ created_by: username }, async (err, data) => {
+//     if(err){
+//       console.log("error while getting user items")
+//       res.status(400).json({ error: "an error occured while retrieving your items"})
+//     }else{
+//       console.log("no error")
+//       // console.log("sending user items from api")
+//       return data
+//       // res.status(200).json({
+//       //   success: true,
+//       //   username: req.user.username,
+//       //   email: req.user.email,
+//       //   createdAt: req.user.createdAt,
+//       //   createdItems: req.user.createdItems,
+//       //   itemData: data
+//       // })
+//     }
+//   })
+// }
 
 const isNotEmptyRegister = (username, email, password) => {
   if(empty(username) || empty(email) || empty(password)){
@@ -59,6 +82,8 @@ const issueJWT = (user) => {
   //that simple
 }
 
+//gonna return to this when cleaning up the code
+// module.exports.findUserItems = findUserItems;
 module.exports.isEmailValid = isEmailValid;
 module.exports.isNotEmptyRegister = isNotEmptyRegister;
 module.exports.isNotEmptyLogin = isNotEmptyLogin;

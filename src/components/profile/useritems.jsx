@@ -91,18 +91,22 @@ const UserItems = () => {
   }
   
   const handleDelete = async (e) => {
+    e.preventDefault()
+    const id = e.target.parentNode.parentNode.parentNode.parentNode.id
     const data = { id: e.target.parentNode.parentNode.parentNode.parentNode.id }
     console.log("data", data, localStorage.getItem ("id_token"))
     axios.delete(
-      'http://localhost:5000/item/delete', data,
+      `http://localhost:5000/item/${id}`,
       { headers: {
-        'Authorization': localStorage.getItem ("id_token")
-      }}, 
-      {withCredentials: true}
-    ).then(res => {
+        'Authorization': localStorage.getItem("id_token")
+      }}
+    ).then(async (res) => {
+      const { itemData } = res.data
       dispatch({
-        type: "RE RENDER USER ITEMS"
+        type: "RE RENDER USER ITEMS",
+        payload: itemData
       })
+      
     }).catch(error => console.log(error))
     
   };

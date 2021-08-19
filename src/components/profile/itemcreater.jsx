@@ -171,8 +171,8 @@ const ItemCreater = () => {
             {withCredentials: true} 
           ).then(async (res) => {
             if(res.data.success){
-              alert("Item is succesfully created")
-              console.log("created",res.data)
+              // alert("Item is succesfully created")
+              // console.log("created",res.data)
               const { itemData } = res.data
               dispatch({
                 type: RE_RENDER_USER_ITEMS,

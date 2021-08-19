@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const passport = require('passport')
 const cors = require('cors');
 require('dotenv').config();
-const routes = require('./routes.js')
+const routes = require('./routes/routes.js')
+const protectedRoutes = require('./routes/protectedroutes.js')
 
 const app = express();
 
@@ -41,6 +42,7 @@ mongoose.connect(process.env.MONGO_URI, {
 const port = process.env.PORT || 5000;
 
 app.use('/', routes)
+app.use('/', passport.authenticate('jwt', { session: false }), protectedRoutes)
 
 
 app.listen(port, () => console.log(`App is listening on port: ${5000}`))

@@ -3,51 +3,43 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const bcrypt = require('bcrypt')
 const passport = require('passport');
-const User = require('./models/user.js');
-const Item = require('./models/item.js');
-const utils = require('./utils')
+const User = require('../models/user.js');
+const Item = require('../models/item.js');
+const utils = require('../utils')
 const empty = require('is-empty')
 
-router.get('/items', (req, res) => {
-  Item.find({}, (err, data) => {
-    if(err){
-      res.status(400).json({ error: "something went wrong"})
-    } else {
-      res.status(200).json({ data: data })
-    }
-  })
-});
 
-router.get('/user/items', passport.authenticate('jwt', { session: false }), (req, res) => {
-  // console.log("getting items of username>>>", req.user.username)
-  Item.find({ created_by: req.user.username }, (err, data) => {
-    if(err){
-      res.status(400).json({ error: "an error occured while retrieving your items"})
-    }else{
-      // console.log("sending user items from api")
-      res.status(200).json({
-        success: true,
-        username: req.user.username,
-        email: req.user.email,
-        createdAt: req.user.createdAt,
-        createdItems: req.user.createdItems,
-        itemData: data
-      })
-    }
-  })
-})
-
-//for some reason I keep getting 401 error, looking for the reason
-// router.delete('/item/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
-router.delete('/item/delete', (req, res) => {
+router.delete('/item/:id', (req, res) => {
 
   console.log("delete backend")
-  const { id } = req.body
-  //need to find the item by name and delete if isBid is false 
+  const { id } = req.params
+  Item.findOneAndRemove({ _id: id }, (err, data) => {
+    if(err || !data){
+      res.status(400).json({error: "an error occured while deleting item"})
+      return;
+    } else {
+      Item.find({ created_by: req.user.username }, (err, data) => {
+        if(err){
+          res.status(400).json({ error: "an error occured while retrieving your items"})
+        }else{
+          res.status(200).json({
+            success: true,
+            username: req.user.username,
+            email: req.user.email,
+            createdAt: req.user.createdAt, 
+            createdItems: req.user.createdItems,
+            itemData: data
+          })
+        }
+      })
+      // res.status(200).json({ success: true, message: "successfuly deleted"})
+      return;
+    }
+  }) 
   
 })
 
-router.post('/item/create', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post('/item/create', (req, res) => {
   const { isEdit, image, name, itemDescription, buyout, starting} = req.body;
   if(empty(name) || empty(itemDescription) || empty(buyout) || empty(starting) || empty(image)){
     return res.status(400).json({error: "Missing required fields"})
@@ -101,7 +93,7 @@ router.post('/item/create', passport.authenticate('jwt', { session: false }), (r
   }
 })
 
-router.get('/item/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/item/:id', (req, res) => {
   //use this route to get one item in to later user for edit or bid request
   const { id } = req.params;
   // console.log(id)
@@ -120,7 +112,7 @@ router.get('/item/:id', passport.authenticate('jwt', { session: false }), (req, 
 })
 
 
-router.patch('/item/edit', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.patch('/item/edit', (req, res) => {
   console.log("reaches here")
   const { isEdit, name, description, buyout, starting} = req.body;
   console.log("edit ? >>", isEdit)
@@ -167,7 +159,7 @@ router.patch('/item/edit', passport.authenticate('jwt', { session: false }), (re
 });
 
 
-router.post('/item/bid', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post('/item/bid', (req, res) => {
   // console.log("in bid" ,req.user)
   const { username } = req.user;
   const { id, amount } = req.body;
@@ -198,10 +190,29 @@ router.post('/item/bid', passport.authenticate('jwt', { session: false }), (req,
   })
 });
 
+router.get('/user/items', (req, res) => {
+  // console.log("getting items of username>>>", req.user.username)
+  const { username } = req.user;
+  
+  Item.find({ created_by: req.user.username }, (err, data) => {
+    if(err){
+      res.status(400).json({ error: "an error occured while retrieving your items"})
+    }else{
+      // console.log("sending user items from api")
+      res.status(200).json({
+        success: true,
+        username: req.user.username,
+        email: req.user.email,
+        createdAt: req.user.createdAt,
+        createdItems: req.user.createdItems,
+        itemData: data
+      })
+    }
+  })
+})
 
 
-
-
+//I used this route for testing jwt only
 router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
   // console.log("this is the req.user>>>>", req.user)
   return res.status(200).json({ 
@@ -212,98 +223,5 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), (req, r
     createdItems: req.user.createdItems
   })
 })
-
-router.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  console.log("login attempt", username, password)
-
-  if(!utils.isNotEmptyLogin(username, password)){
-    console.log("missing fileds")
-    res.status(400).json({ error: "missing required fields" })
-    return;
-  }
-  User.findOne({ username: username}, async (err, user) => {
-    if(err){
-      console.log("database error")
-      return res.status(400).json({ success: false, error: `an error occured: ${err}`})
-    } else if(!user) {
-      console.log("no user in database")
-      return res.status(400).json({ success: false, error: "unknown username"})
-    } else {
-      console.log("found the user")
-      const isValid = await utils.validPassword(password, user.password)
-      if(!isValid){
-        console.log("incorrect password")
-        return res.status(400).json({ success: false, error: "incorrect password"})
-      } else {
-        console.log("everything right sending token")
-        const tokenObj = utils.issueJWT(user)
-        res.status(200).json(
-          { success: true, 
-            user: { 
-              username: user.username, 
-              email: user.email, 
-              createdAt: user.createdAt
-            }, 
-            token: tokenObj.token, 
-            expiresIn: tokenObj.expires 
-          }
-        );
-      }
-    }
-  })
-});
-
-router.post('/register', (req, res) => {
-  console.log('req. body info', req.body)
-  const { username, password, email } = req.body;
-
-  if(!utils.isNotEmptyRegister(username, email, password)){
-    res.status(400).json({ success: false, error: "missing required fields" })
-    return;
-  };
-  if(!utils.isEmailValid(email)){
-    res.status(400).json({ success: false, error: "email is invalid"})
-    return;
-  };
-  
-  User.findOne({ username: username }, async (err, data) => {
-    if(err){
-      return res.status(400).json({ success: false, error: `An error occured: ${err}`})
-    } else if(data) {
-      return res.status(400).json({ success: false, error: "username taken"})
-    } else {
-      const passwordToSave = await utils.genPassword(password);
-
-      const newUser = new User({
-        username: username,
-        email: email,
-        password: passwordToSave
-      });
-
-      newUser.save()
-        .then(user => {
-          console.log("registered new user")
-          // res.status(201).json(user)
-          const jwt = utils.issueJWT(user)
-          res.status(201).json(
-            { 
-              success: true, 
-              user: { 
-                username: user.username,
-                email: user.email, 
-                createdAt: user.createdAt
-              }, 
-              token: jwt.token, 
-              expiresIn: jwt.expires
-            }
-          );
-        })
-        .catch(error => console.log(error))
-    }
-  })
-})
-
-
 
 module.exports = router;
