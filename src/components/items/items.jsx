@@ -19,10 +19,12 @@ TimeAgo.addLocale(ru)
 
 const Items = () => {
   // const [allItems, setAllItems] = useState(undefined);
-  const [search, setSearch] = useState(undefined);
-  const dispatch = useDispatch()
-  const allItems = useSelector(state => state.allItems)
-  console.log(allItems);
+  const dispatch = useDispatch();
+  const allItems = useSelector(state => state.allItems);
+  const [ search, setSearch ] = useState(undefined);
+  const [ filteredItems, setFilteredItems ] = useState(undefined);
+
+  // console.log(allItems);
 
   useEffect(() => {
     axios.get('http://localhost:5000/items')
@@ -36,23 +38,24 @@ const Items = () => {
       .catch(error => console.log(error))
   }, [])
 
-  const handleSearch = (e) => {
-    setSearch(e.target.value)
-    //filter all items by turning the searched word  
-    // console.log(e.target.value)
-  }
+  
   return(
     <div>
       <div className="form-inline w-50 mx-auto">
-        <input type="text"  placeholder="Search" onChange={handleSearch} className="form-control mb-3 text-center w-30"></input>
+        <input type="text"  placeholder="Search" onChange={e => setSearch(e.target.value)} className="form-control mb-3 text-center w-30"></input>
       </div>
       <div className="container">
         <div className="row">
-            {allItems.map(item => {
+          { 
+            !search ? 
+              allItems.map(item => {return<Item item={item}/>}) : 
+              allItems.filter(item => item.name.search(new RegExp(search, "i")) >= 0).map(item => {return<Item item={item}/>})
+          }
+          {/* {allItems.map(item => {
             return<Item item={item}/>
-          })}
+          })}  */}
         </div>
-      </div>
+      </div> 
     </div>
   )
 };
