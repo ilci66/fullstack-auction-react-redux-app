@@ -29,7 +29,7 @@ const Item = ({item}) => {
         </div>
         <div className="card-footer">
           Highest Bid: {item.bids.length > 0 ? `${item.bids[item.bids.length -1].amount} $` : "No bid so far"}
-          <div onClick={handleSeeMore} className="d-flex mt-2 btn w-100 btn-lg btn-outline-success mx-auto">See More</div>
+          <div onClick={handleSeeMore} className="mt-2 btn w-100 btn-lg btn-outline-success mx-auto">See More</div>
           </div>
       </div>
     </div>

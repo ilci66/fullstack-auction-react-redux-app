@@ -15,6 +15,29 @@ const ItemInDetail = () => {
   // console.log(chosenItem.bids["0"])
   //make a request and send auth header, amount, user and item id to the route,
   //that's it for today
+
+  const handleBuyout = (e) => {
+    e.preventDefault();
+    const data = [ itemid ]
+    axios.post(
+      'http://localhost:5000/item/payment', data,
+      { headers: {'Authorization': localStorage.getItem("id_token")}}, 
+      { withCredentials: true } 
+    )
+      .then(async (res) => {
+        const itemData = await res.data.data
+        dispatch({
+          type: "ADD ITEM TO EDIT",
+          payload: itemData
+        })  
+        console.log(res.data.data)
+      })
+      .catch(error => {
+        // console.log('something wrong')
+        console.log(error)
+      })
+  }
+
   const handleBid = async (e) => {
     e.preventDefault();
     if(parseFloat(amount) < parseFloat(chosenItem.starting)){
@@ -109,7 +132,7 @@ const ItemInDetail = () => {
       </div>
       <button type="submit" className="w-50 btn btn-lg btn-outline-success mx-auto">Bid</button>
     </form>
-    <button className="mt-3 w-50 btn btn-lg btn-outline-primary mx-auto">Buyout The Item</button>
+    <button onClick={handleBuyout} className="mt-3 w-50 btn btn-lg btn-outline-primary mx-auto">Buyout The Item</button>
     </div>
   )
 };

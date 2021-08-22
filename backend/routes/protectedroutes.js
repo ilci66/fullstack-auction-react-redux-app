@@ -8,9 +8,25 @@ const Item = require('../models/item.js');
 const utils = require('../utils')
 const empty = require('is-empty')
 
+router.post('/item/payment', async (req, res) => {
+  console.log(req.body.items)
+  const { items } = req.body
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment",
+      line_items: items.map(item => {
+        const storeItem = Item.find({_id : item})
+        console.log("sstore", storeItem)
+        return storeItem
+      })
+    })
+  } catch (error) {
+    
+  }
+})
 
 router.delete('/item/:id', (req, res) => {
-
   console.log("delete backend")
   const { id } = req.params
   Item.findOneAndRemove({ _id: id }, (err, data) => {
