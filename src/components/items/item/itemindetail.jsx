@@ -25,6 +25,7 @@ const ItemInDetail = () => {
       { withCredentials: true } 
     )
       .then(async (res) => {
+        console.log('got response')
         const itemData = await res.data.data
         dispatch({
           type: "ADD ITEM TO EDIT",
@@ -33,7 +34,7 @@ const ItemInDetail = () => {
         console.log(res.data.data)
       })
       .catch(error => {
-        // console.log('something wrong')
+        console.log('something wrong with payment')
         console.log(error)
       })
   }

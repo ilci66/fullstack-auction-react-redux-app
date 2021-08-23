@@ -18,25 +18,31 @@ router.post('/item/payment', async (req, res) => {
       mode: "payment",
       line_items: items.map(item => {
         console.log("it here")
-        const storeItem = Item.find({_id : item})
-        console.log("sstore", storeItem)
-        return {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: storeItem.name
+        const storeItem = Item.find({_id : item}, (err ,data) => {
+          console.log("sstore", storeItem)
+          if(err){
+            console.log('error in database payment')
+          }else if(data){return {
+            price_data: {
+              currency: "usd",
+              product_data: {
+                name: data.name
+              },
+              unit_amount: parseFloat(data.buyout) * 100,
             },
-            unit_amount: parseFloat(storeItem.buyout) * 100,
-          },
-          quantity: 1
-        }
+            quantity: 1
+          }}
+        })
+        
       }),
-      success_url: `${process.env.FRONTEND_URL}//payment-success`,
-      cancel_url: `${process.env.FRONTEND_URL}//payment-fail`,
+      success_url: `${process.env.FRONTEND_URL}/payment-success`,
+      cancel_url: `${process.env.FRONTEND_URL}/payment-fail`,
     })
+    console.log("comes at urls")
     res.json({ url: session.url })
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    console.log('backend payment error')
+    res.status(400).json({ error: error.message })
   }
 })
 
