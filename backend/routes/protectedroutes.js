@@ -9,20 +9,34 @@ const utils = require('../utils')
 const empty = require('is-empty')
 
 router.post('/item/payment', async (req, res) => {
-  console.log(req.body.items)
-  const { items } = req.body
+  console.log("frst items ",req.body[0])
+  const items  = req.body
   try {
+    console.log("in try")
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
       line_items: items.map(item => {
+        console.log("it here")
         const storeItem = Item.find({_id : item})
         console.log("sstore", storeItem)
-        return storeItem
-      })
+        return {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: storeItem.name
+            },
+            unit_amount: parseFloat(storeItem.buyout) * 100,
+          },
+          quantity: 1
+        }
+      }),
+      success_url: `${process.env.FRONTEND_URL}//payment-success`,
+      cancel_url: `${process.env.FRONTEND_URL}//payment-fail`,
     })
+    res.json({ url: session.url })
   } catch (error) {
-    
+    res.status(500).json({ error: error.message })
   }
 })
 
@@ -149,7 +163,7 @@ router.patch('/item/edit', (req, res) => {
         res.status(400).json({ error: "an error occured when searching in database"})
         return;
       }else if(!data){
-        res.status(400).json({ error: "there is no data to edit in the database"})
+        res.status(400).json({ error: "there is no data to edit in the database"}) 
       }else {
         console.log('item edited')
         // res.status(200).json({ success: true, message: "succesfully edited"})
