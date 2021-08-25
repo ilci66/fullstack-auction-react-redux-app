@@ -12,7 +12,7 @@ const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 router.post('/item/payment', async (req, res) => {
   console.log("frst items", req.body[0])
   const items  = req.body
-  let storeItems = undefined
+  let storeItems = []
   let promiseChain = new Promise((resolve, reject) => {
     items.map(item => {
       Item.find({ _id: item }, (err, data) => {
@@ -23,34 +23,36 @@ router.post('/item/payment', async (req, res) => {
         }
       })
     })
-    resolve(storeItems)
+    // console.log(">>>>>",storeItems)
+    // return resolve(storeItems)
   })
   //changed above this line, go on and work on the rest after your break
-  // promiseChain
-  //   .then(async items => {
-  //     console.log("result >>>", items[0].name)
-  //     const session = await stripe.checkout.sessions.create({
-  //       payment_method_types: ["card"],
-  //       mode: "payment",
-  //       line_items: {
-  //         price_data: {
-  //           currency: "usd",
-  //           product_data: {
-  //             name: result[0].name,
-  //           },
-  //           unit_amount: parseFloat(result[0].buyout) * 100
-  //         },
-  //         quantity: 1,
-  //       },
-  //     success_url: `${process.env.FRONTEND_URL}payment/success`,
-  //     cancel_url: `${process.env.FRONTEND_URL}/payment/fail`,
-  //     })
-  //     res.json({ url: session.url })
-  //   })
-  //   .catch(error => {
-  //     console.log("something went wrong with promises")
-  //     console.log(error.message)
-  //   })
+  promiseChain
+    .then(items => {
+      console.log("items", items)
+      // console.log("result >>>", items[0].name)
+      // const session = await stripe.checkout.sessions.create({
+      //   payment_method_types: ["card"],
+      //   mode: "payment",
+      //   line_items: {
+      //     price_data: {
+      //       currency: "usd",
+      //       product_data: {
+      //         name: item.name,
+      //       },
+      //       unit_amount: parseFloat(ite.buyout) * 100
+      //     },
+      //     quantity: 1,
+      //   },
+      // success_url: `${process.env.FRONTEND_URL}payment/success`,
+      // cancel_url: `${process.env.FRONTEND_URL}/payment/fail`,
+      // })
+      // res.json({ url: session.url })
+    })
+    .catch(error => {
+      console.log("something went wrong with promises")
+      console.log(error.message)
+    })
 })
 
 router.delete('/item/:id', (req, res) => {
