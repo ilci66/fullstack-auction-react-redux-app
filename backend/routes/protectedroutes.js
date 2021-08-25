@@ -7,6 +7,7 @@ const User = require('../models/user.js');
 const Item = require('../models/item.js');
 const utils = require('../utils')
 const empty = require('is-empty')
+const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
 router.post('/item/payment', async (req, res) => {
   console.log("frst items ",req.body[0])
@@ -18,22 +19,18 @@ router.post('/item/payment', async (req, res) => {
       mode: "payment",
       line_items: items.map(item => {
         console.log("it here")
-        const storeItem = Item.find({_id : item}, (err ,data) => {
-          console.log("sstore", storeItem)
-          if(err){
-            console.log('error in database payment')
-          }else if(data){return {
-            price_data: {
-              currency: "usd",
-              product_data: {
-                name: data.name
-              },
-              unit_amount: parseFloat(data.buyout) * 100,
+        const storeItem = Item.find({_id : item})
+        return {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: storeItem.name
             },
-            quantity: 1
-          }}
-        })
-        
+            unit_amount: parseFloat(storeItem.buyout) * 100,
+          },
+          quantity: 1
+        }
+        console.log("storeItem>>>",storeItem)
       }),
       success_url: `${process.env.FRONTEND_URL}/payment-success`,
       cancel_url: `${process.env.FRONTEND_URL}/payment-fail`,
@@ -41,7 +38,7 @@ router.post('/item/payment', async (req, res) => {
     console.log("comes at urls")
     res.json({ url: session.url })
   } catch (error) {
-    console.log('backend payment error')
+    console.log(error)
     res.status(400).json({ error: error.message })
   }
 })
