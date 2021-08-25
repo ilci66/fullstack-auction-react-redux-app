@@ -10,51 +10,47 @@ const empty = require('is-empty')
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
 router.post('/item/payment', async (req, res) => {
-  console.log("frst items ",req.body[0])
+  console.log("frst items", req.body[0])
   const items  = req.body
-  let storeItems = []
+  let storeItems = undefined
   let promiseChain = new Promise((resolve, reject) => {
-    items.map(item =>{Item.find({ _id: item }, (err, data) => {
-      if(data){
-        storeItems.push(data)
-        return storeItems
-      }else{
-        console.log('not working bro')
-      }
-    })})
+    items.map(item => {
+      Item.find({ _id: item }, (err, data) => {
+        if(data){
+          storeItems.push(data)
+        }else{
+          console.log('not working bro')
+        }
+      })
+    })
+    resolve(storeItems)
   })
-  promiseChain.then(result => console.log("this is the result",result))
-
-  // try {
-  //   console.log("in try")
-  //   const session = await stripe.checkout.sessions.create({
-  //     payment_method_types: ["card"],
-  //     mode: "payment",
-  //     line_items: items.map(async item => {
-  //       console.log("it here")
-  //       const storeItem = await Item.find({_id : item})
-        
-  //       console.log("storeItem>>>",storeItem.buyout)
-  //       return {
+  //changed above this line, go on and work on the rest after your break
+  // promiseChain
+  //   .then(async items => {
+  //     console.log("result >>>", items[0].name)
+  //     const session = await stripe.checkout.sessions.create({
+  //       payment_method_types: ["card"],
+  //       mode: "payment",
+  //       line_items: {
   //         price_data: {
   //           currency: "usd",
   //           product_data: {
-  //             name: storeItem.name
+  //             name: result[0].name,
   //           },
-  //           unit_amount: Math.round(parseFloat(storeItem.buyout) * 100),
+  //           unit_amount: parseFloat(result[0].buyout) * 100
   //         },
-  //         quantity: 1
-  //       }
-  //     }),
-  //     success_url: `${process.env.FRONTEND_URL}/payment-success`,
-  //     cancel_url: `${process.env.FRONTEND_URL}/payment-fail`,
+  //         quantity: 1,
+  //       },
+  //     success_url: `${process.env.FRONTEND_URL}payment/success`,
+  //     cancel_url: `${process.env.FRONTEND_URL}/payment/fail`,
+  //     })
+  //     res.json({ url: session.url })
   //   })
-  //   console.log("comes at urls")
-  //   res.json({ url: session.url })
-  // } catch (error) {
-  //   console.log(error.message)
-  //   res.status(400).json({ error: error.message })
-  // }
+  //   .catch(error => {
+  //     console.log("something went wrong with promises")
+  //     console.log(error.message)
+  //   })
 })
 
 router.delete('/item/:id', (req, res) => {

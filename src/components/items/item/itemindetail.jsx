@@ -26,12 +26,13 @@ const ItemInDetail = () => {
     )
       .then(async (res) => {
         console.log('got response')
-        const itemData = await res.data.data
-        dispatch({
-          type: "ADD ITEM TO EDIT",
-          payload: itemData
-        })  
-        console.log(res.data.data)
+        
+        // const itemData = await res.data.data
+        // dispatch({
+        //   type: "ADD ITEM TO EDIT",
+        //   payload: itemData
+        // })  
+        // console.log(res.data.data)
       })
       .catch(error => {
         console.log('something wrong with payment')
