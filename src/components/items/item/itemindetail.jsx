@@ -11,28 +11,19 @@ const ItemInDetail = () => {
   const loading = useSelector(state => state.loading)
   const chosenItem = useSelector(state => state.chosenItem)
   const [amount, setAmount] = useState(undefined)
-  // const allItems = useSelector(state => state.allItems);
-  // console.log(chosenItem.bids["0"])
-  //make a request and send auth header, amount, user and item id to the route,
-  //that's it for today
-
+  
   const handleBuyout = (e) => {
     e.preventDefault();
     const data = [ itemid ]
+    console.log(data)
     axios.post(
       'http://localhost:5000/item/payment', data,
       { headers: {'Authorization': localStorage.getItem("id_token")}}, 
       { withCredentials: true } 
     )
-      .then(async (res) => {
-        console.log('got response')
-        
-        // const itemData = await res.data.data
-        // dispatch({
-        //   type: "ADD ITEM TO EDIT",
-        //   payload: itemData
-        // })  
-        // console.log(res.data.data)
+      .then(res => {
+        console.log('res', res.data.url)
+        window.location = res.data.url
       })
       .catch(error => {
         console.log('something wrong with payment')

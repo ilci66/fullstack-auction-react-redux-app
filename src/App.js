@@ -42,9 +42,11 @@ function App() {
             <Profile />
           </Route>
           <Route exact path="/payment-success">
+            <NavBar />
             <Success />
           </Route>
           <Route exact path="/payment-fail">
+            <NavBar />
             <Fail />
           </Route>
         </Switch>
