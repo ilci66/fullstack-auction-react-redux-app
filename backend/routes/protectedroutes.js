@@ -9,9 +9,12 @@ const utils = require('../utils')
 const empty = require('is-empty')
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
+router.get('item/highest', (req, res) => {
+  console.log(res.user)
+})
+
 router.post('/item/payment', async (req, res) => {
   const items  = req.body
-  
   let promiseChain = new Promise(async (resolve, reject) => {
     let storeItems =  await Item.find({ '_id': { $in: items } });
     return resolve(storeItems)

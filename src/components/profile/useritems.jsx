@@ -124,12 +124,12 @@ const UserItems = () => {
         You have {userItems.length == 1 ? "1 active item" : `${userItems.length} active items`} 
       </p>
       <div className="container">
-        <div className="row row-cols-1 row-cols-md-3 g-4 mx-auto">
+        <div className="row">
             {
               userItems.map(item => {
                 {/* gave the id={item.name} to the container div here */}
                 return<div key={item._id} id={item._id} className="col d-flex"> 
-                <div className="card">
+                <div className="card m-2">
                   <img src={item.image} className="card-img-top"></img>
                   <div className="card-body">
                     <h5 className="card-title">{item.name}</h5>
