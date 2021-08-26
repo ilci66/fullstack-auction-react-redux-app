@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios'
 
 const UserToPay = () => {
   useEffect(() => {
     axios.get(
       'http://localhost:5000/item/highest',
-      {headers: {
+      { headers: {
         'Authorization': localStorage.getItem("id_token")
       }} 
     )

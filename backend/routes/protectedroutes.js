@@ -9,8 +9,15 @@ const utils = require('../utils')
 const empty = require('is-empty')
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
-router.get('item/highest', (req, res) => {
-  console.log(res.user)
+router.get('/item/highest', (req, res) => {
+  const { username } = req.user
+  // console.log("user in highest>>>", req.user)
+  // Item.findOne({ }, (err, data) => {
+  //   console.log("ths is the last bid",data.bids[data.bids.length-1].bidder)
+  // })
+  Item.find({ bids[bids.length-1].bidder: username }, (err, data) => {
+    console.log(data)
+  })
 })
 
 router.post('/item/payment', async (req, res) => {
@@ -138,9 +145,9 @@ router.get('/item/:id', (req, res) => {
   //use this route to get one item in to later user for edit or bid request
   const { id } = req.params;
   // console.log(id)
-  Item.findById({ _id:id }, (err, data) => {
+  Item.findById({ _id: id }, (err, data) => {
     if(err) {
-      console.log("error in loooking for the item")
+      console.log("error in looking for the item")
       res.status(400).json({error: `${err}`})
     } else if(!data) {
       console.log("no item in database")
