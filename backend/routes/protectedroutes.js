@@ -11,12 +11,26 @@ const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
 router.get('/item/highest', (req, res) => {
   const { username } = req.user
-  // console.log("user in highest>>>", req.user)
-  // Item.findOne({ }, (err, data) => {
-  //   console.log("ths is the last bid",data.bids[data.bids.length-1].bidder)
-  // })
-  Item.find({ bids[bids.length-1].bidder: username }, (err, data) => {
-    console.log(data)
+  let responseArray = []
+  User.findOne({ username: username }, (err, userData) => {
+    console.log(userData.bidOn)
+    userData.bidOn.map(async itemId => {
+      const itemData = await Item.findOne({ _id: itemId })
+      const isTrue = await itemData.bids[itemData.bids.length -1].bidder == username
+      console.log(isTrue)
+      if(isTrue){
+        let data = await { highest: true, itemName: itemData.name}
+        console.log("supposed to be here")
+        responseArray.push(data)
+      }else{
+        console.log("but instead goes here")
+        let data = await { highest: false, itemName: itemData.name}
+        responseArray.push(data)
+      }
+    })
+    console.log(responseArray)
+    res.status(200).json(responseArray)
+    return;
   })
 })
 
@@ -230,6 +244,10 @@ router.post('/item/bid', (req, res) => {
           return;
         } else {
           console.log("savedData", savedData.bids)
+          User.findOne({ username, username}, (err, data) => {
+            data.bidOn.push(savedData._id)
+            data.save()
+          })
           res.status(200).json({ success: true, data: savedData})
           return;
         }

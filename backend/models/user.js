@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   createdItems: [String],
+  bidOn:[String],
   won_items: [String]
 }, { timestamps: true});
 
