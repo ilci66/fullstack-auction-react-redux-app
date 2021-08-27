@@ -9,29 +9,51 @@ const utils = require('../utils')
 const empty = require('is-empty')
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
-router.get('/item/highest', (req, res) => {
+router.get('/item/highest', async (req, res) => {
+  //maybe go with an async await logic instead of promises
   const { username } = req.user
   let responseArray = []
-  User.findOne({ username: username }, (err, userData) => {
-    console.log(userData.bidOn)
-    userData.bidOn.map(async itemId => {
-      const itemData = await Item.findOne({ _id: itemId })
-      const isTrue = await itemData.bids[itemData.bids.length -1].bidder == username
-      console.log(isTrue)
-      if(isTrue){
-        let data = await { highest: true, itemName: itemData.name}
-        console.log("supposed to be here")
-        responseArray.push(data)
-      }else{
-        console.log("but instead goes here")
-        let data = await { highest: false, itemName: itemData.name}
-        responseArray.push(data)
-      }
+  try{ 
+    const userData = await User.findOne({ username: username })
+    const userBidOn = await userData.bidOn
+    const items = await Item.find({ '_id': { $in: userBidOn } })
+
+    console.log(items.length, typeof items, Object.keys(items), items["0"].bids[items["0"].bids.length -1].bidder)
+    const highestBids = await items.map(item =>  item.bids[item.bids.length -1])
+
+    highestBids.map(ele => {
+      if(ele.bidder === "leyle") responseArray.push({ highest: true , bid: ele.amount,
+        //need to add an idetifier such as a name or an image
+        //  itemName: 
+        })
     })
+
     console.log(responseArray)
-    res.status(200).json(responseArray)
-    return;
-  })
+  }catch(error){
+    console.log(error)
+  }
+  // User.findOne({ username: username }, (err, userData) => {
+  //   console.log(userData.bidOn)
+  //   userData.bidOn.map(async itemId => {
+  //     const itemData = await Item.findOne({ _id: itemId })
+  //     const isTrue = await itemData.bids[itemData.bids.length -1].bidder == username
+  //     console.log(isTrue)
+  //     if(isTrue){
+  //       let data = await { highest: true, itemName: itemData.name}
+  //       console.log("supposed to be here")
+  //       // responseArray.push(data)
+  //     }else{
+  //       console.log("but instead goes here")
+  //       let data = await { highest: false, itemName: itemData.name}
+  //       // responseArray.push(data)
+  //     }
+  //     responseArray.push(data)
+
+  //   })
+  //   console.log(responseArray)
+  //   res.status(200).json(responseArray)
+  //   return;
+  // })
 })
 
 router.post('/item/payment', async (req, res) => {
