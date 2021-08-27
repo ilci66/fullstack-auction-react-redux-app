@@ -9,6 +9,13 @@ const utils = require('../utils')
 const empty = require('is-empty')
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
+// so this is the logic, make a call to the databse for expired items and send to add into user's to pay section
+// const testfunc = () => {
+//   console.log("testing")
+// }
+
+// setInterval(testfunc, 5000, "stuff")
+
 router.get('/item/highest', async (req, res) => {
   const { username } = req.user
   let responseArray = []
