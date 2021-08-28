@@ -13,8 +13,24 @@ const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 // const testfunc = () => {
 //   console.log("testing")
 // }
-
 // setInterval(testfunc, 5000, "stuff")
+
+const timeChecker = async () => {
+  const expired = await new Date(new Date().getTime() - 7*24*60*60*1000)
+  console.log("expired", expired) 
+  const items = await Item.find({ updatedAt: { $lte: expired}})
+  const test = await items.map(item => {
+    Item.findOne({_id: item["_id"]}, (err, data) => {
+      if(err || !data) console.log("something went wrong while looking for expired items")
+      data.userWon = data.bids[data.bids.length - 1].bidder
+      data.save()
+    })
+  })
+}
+setInterval(timeChecker, 60000)
+
+// populate won_items while making use of the function above
+ 
 
 router.get('/item/highest', async (req, res) => {
   const { username } = req.user

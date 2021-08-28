@@ -15,7 +15,8 @@ const itemSchema = new mongoose.Schema({
   created_by: String,
   //didn't use it anywhere, unnecessary at this point
   isBid: {type: Boolean, default: false, index:true},
-  bids: [bidSchema]
+  bids: [bidSchema],
+  userWon:String,
 }, {timestamps: true});
 
 itemSchema.index({ createdAt: 1}, { expireAfterSeconds: 7*24*60*60, partialFilterExpression : {isBid: false} })

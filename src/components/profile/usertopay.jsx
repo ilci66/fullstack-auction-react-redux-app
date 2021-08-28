@@ -4,8 +4,8 @@ import axios from 'axios'
 
 const UserToPay = () => {
 
-  const [ userBidItems , setUserBidItems ] = useState(undefined)
-
+  const [ userBidItems , setUserBidItems ] = useState(undefined);
+  const [ itemsAwaitingPayment, setItemsAwaitingPayment ] = useState(undefined);
 
   useEffect(() => {
     axios.get(
