@@ -30,7 +30,10 @@ const timeChecker = async () => {
 setInterval(timeChecker, 60000)
 
 // populate won_items while making use of the function above
- 
+router.get('./items/expired', async (req, res) => {
+  const items = await Item.find({ userWon: { $ne: "" } })
+  //gonna continue later 
+})
 
 router.get('/item/highest', async (req, res) => {
   const { username } = req.user
