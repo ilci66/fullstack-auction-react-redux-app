@@ -35,6 +35,26 @@ const UserToPay = () => {
       .catch(error => error)
   },[])
 
+  const handlePayForAll = async (e) => {
+    e.preventDefault();
+    const data = []
+    const test = await itemsAwaitingPayment.map(item => data.push(item.ItemId));
+    console.log(data)
+    axios.post(
+      'http://localhost:5000/item/payment', data,
+      { headers: {'Authorization': localStorage.getItem("id_token")}}, 
+      { withCredentials: true } 
+    )
+    .then(res => {
+      console.log('res', res.data.url)
+      window.location = res.data.url
+    })
+    .catch(error => {
+      console.log('something wrong with payment')
+      console.log(error)
+    })
+  }
+
   console.log(itemsAwaitingPayment)
   //show the first 10 items with titles that the user won, if there are more items than that add a scroll option or dropdown
   console.log("userbiditems", userBidItems)
@@ -47,7 +67,7 @@ const UserToPay = () => {
           <ul className="list-group">
             {itemsAwaitingPayment.map(item => <li className="list-group-item">Name: <b>{item.itemName}</b>, amount: {item.itemAmount}</li>)}
           </ul>
-          <button>Pay for all</button>
+          <button onClick={handlePayForAll}>Pay for all</button>
         </div>
           : <p>No item awaiting payment.</p>
       }
