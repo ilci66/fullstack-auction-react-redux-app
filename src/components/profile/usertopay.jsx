@@ -67,7 +67,7 @@ const UserToPay = () => {
           <ul className="list-group">
             {itemsAwaitingPayment.map(item => <li className="list-group-item">Name: <b>{item.itemName}</b>, amount: {item.itemAmount}</li>)}
           </ul>
-          <button onClick={handlePayForAll}>Pay for all</button>
+          <button className="btn btn-primary w-100" onClick={handlePayForAll}>Pay for all</button>
         </div>
           : <p>No item awaiting payment.</p>
       }
