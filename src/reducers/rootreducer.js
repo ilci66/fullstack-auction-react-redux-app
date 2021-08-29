@@ -5,35 +5,17 @@ import {
   GET_USER_ITEMS,
   TURN_OFF_LOADING,
   TURN_ON_LOADING,
-  // SIGN_UP, 
-  // SIGN_IN, 
   RE_RENDER_USER_ITEMS, 
   ADD_ITEM_TO_EDIT,
-  EDIT_ITEM, 
+  // EDIT_ITEM, 
   TURN_ON_EDIT,
   TURN_OFF_EDIT,
   DELETE_ITEM, 
   CLEAR_CHOSEN_ITEM,
-  // BID_ITEM, 
-  // BUYOUT_ITEM 
 } from '../actions/actiontypes';
 
-import { 
-  // editItem, 
-  deleteItem,
-  makeRequest, 
-  getUserItems 
-} from '../actions/utils'
 
-// need an initial state where i can put all the post created 
-//by the user, edit, delete anc reate happens there too, and 
-//instead of diectly from the api call I can get the necessary 
-//data here, this way the changes would cause a re-render as well 
 
-// const initialState = {
-//   user:"someone",
-//   userItems: "some Items"
-// }
 const initialState = {
   allItems: [],
   userItems: [],
@@ -74,16 +56,6 @@ const rootReducer = (state = initialState, action)=> {
       }
       break;
     case GET_USER_INFO:
-      // console.log("palyoad  to get user info", action.payload)
-      // state.userInfo = {username:"", email:"", createdAt:""}
-      // return Object.assign({}, state, 
-      //   { userInfo: {
-      //     username: state.userInfo.username.concat(action.payload.username), 
-      //     email: state.userInfo.email.concat(action.payload.email),
-      //     createdAt: state.userInfo.createdAt.concat(action.payload.createdAt) 
-      //     }
-      //   },
-      // )
         return Object.assign({}, state, 
           { userInfo: {
               username: action.payload.username,
@@ -94,11 +66,6 @@ const rootReducer = (state = initialState, action)=> {
         )
       break;
     case GET_USER_ITEMS:
-      // console.log(action.payload)
-      // state.userItems = []
-      // return {...state,
-      //   userItems: state.userItems.concat(action.payload)
-      // }
       return {...state,
         userItems: action.payload
       }
@@ -150,13 +117,12 @@ const rootReducer = (state = initialState, action)=> {
           }
         }
       )
-    case EDIT_ITEM:
-      console.log('editing in reducer')
-      break;
-    case DELETE_ITEM:
-      
-      console.log("wanna delete using dispatch and stuff", action.payload)
-      break;
+    // case EDIT_ITEM:
+    //   console.log('editing in reducer')
+    //   break;
+    // case DELETE_ITEM:
+    //   console.log("wanna delete using dispatch and stuff", action.payload)
+    //   break;
     
     default:
       return state

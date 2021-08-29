@@ -6,16 +6,16 @@ import ReactTimeAgo from 'react-time-ago'
 
 const ItemInDetail = () => {
   const { itemid } = useParams();
-  console.log(itemid)
+  // console.log(itemid)
   const dispatch = useDispatch();
   const loading = useSelector(state => state.loading)
   const chosenItem = useSelector(state => state.chosenItem)
-  const [amount, setAmount] = useState(undefined)
+  const [ amount, setAmount ] = useState(undefined)
   
   const handleBuyout = (e) => {
     e.preventDefault();
     const data = [ itemid ]
-    console.log(data)
+    // console.log(data)
     axios.post(
       'http://localhost:5000/item/payment', data,
       { headers: {'Authorization': localStorage.getItem("id_token")}}, 
@@ -50,8 +50,7 @@ const ItemInDetail = () => {
       amount,
       id: chosenItem.id
     }
-    // console.log("data to send", data)
-    // console.log("id token", localStorage.getItem("id_token"))
+
     axios.post(
       'http://localhost:5000/item/bid', data,
       { headers: {'Authorization': localStorage.getItem("id_token")}}, 

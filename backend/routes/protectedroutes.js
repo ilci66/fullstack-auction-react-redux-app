@@ -9,11 +9,6 @@ const utils = require('../utils')
 const empty = require('is-empty')
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
-// so this is the logic, make a call to the databse for expired items and send to add into user's to pay section
-// const testfunc = () => {
-//   console.log("testing")
-// }
-// setInterval(testfunc, 5000, "stuff")
 
 const timeChecker = async () => {
   const expired = await new Date(new Date().getTime() - 7*24*60*60*1000)
@@ -29,12 +24,10 @@ const timeChecker = async () => {
 }
 setInterval(timeChecker, 60000)
 
-// populate won_items while making use of the function above
 router.get('/items/expired', async (req, res) => {
   let resArr = []
   const { username } = req.user
   const items = await Item.find({ userWon: { $ne: "" } })
-  //gonna continue later 
   const filtered = await items.filter(item => item.userWon == username)
   const test = await filtered.map(item => {
     resArr.push({ itemId: item["_id"], itemName: item.name, itemAmount: item.bids[item.bids.lengt - 1].amount })
@@ -52,7 +45,7 @@ router.get('/item/highest', async (req, res) => {
     const userBidOn = await userData.bidOn
     const items = await Item.find({ '_id': { $in: userBidOn } })
 
-    console.log(items.length, typeof items, Object.keys(items), items["0"].bids[items["0"].bids.length -1].bidder)
+    // console.log(items.length, typeof items, Object.keys(items), items["0"].bids[items["0"].bids.length -1].bidder)
 
     items.map(item => {
       if(item.bids[item.bids.length -1].bidder === username){
@@ -128,7 +121,6 @@ router.delete('/item/:id', (req, res) => {
           })
         }
       })
-      // res.status(200).json({ success: true, message: "successfuly deleted"})
       return;
     }
   }) 
@@ -190,9 +182,7 @@ router.post('/item/create', (req, res) => {
 })
 
 router.get('/item/:id', (req, res) => {
-  //use this route to get one item in to later user for edit or bid request
   const { id } = req.params;
-  // console.log(id)
   Item.findById({ _id: id }, (err, data) => {
     if(err) {
       console.log("error in looking for the item")
@@ -232,7 +222,6 @@ router.patch('/item/edit', (req, res) => {
         res.status(400).json({ error: "there is no data to edit in the database"}) 
       }else {
         console.log('item edited')
-        // res.status(200).json({ success: true, message: "succesfully edited"})
         Item.find({ created_by: req.user.username }, (err, data) => {
           if(err){
             res.status(400).json({ error: "an error occured while retrieving your items"})
@@ -256,7 +245,6 @@ router.patch('/item/edit', (req, res) => {
 
 
 router.post('/item/bid', (req, res) => {
-  // console.log("in bid" ,req.user)
   const { username } = req.user;
   const { id, amount } = req.body;
   console.log(username, id, amount)
@@ -291,14 +279,12 @@ router.post('/item/bid', (req, res) => {
 });
 
 router.get('/user/items', (req, res) => {
-  // console.log("getting items of username>>>", req.user.username)
   const { username } = req.user;
   
   Item.find({ created_by: req.user.username }, (err, data) => {
     if(err){
       res.status(400).json({ error: "an error occured while retrieving your items"})
     }else{
-      // console.log("sending user items from api")
       res.status(200).json({
         success: true,
         username: req.user.username,
@@ -312,16 +298,16 @@ router.get('/user/items', (req, res) => {
 })
 
 
-//I used this route for testing jwt only
-router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
-  // console.log("this is the req.user>>>>", req.user)
-  return res.status(200).json({ 
-    success: true,
-    username: req.user.username,
-    email: req.user.email,
-    createdAt: req.user.createdAt,
-    createdItems: req.user.createdItems
-  })
-})
+// I used this route for testing jwt only
+// router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
+// console.log("this is the req.user>>>>", req.user)
+//   return res.status(200).json({ 
+//     success: true,
+//     username: req.user.username,
+//     email: req.user.email,
+//     createdAt: req.user.createdAt,
+//     createdItems: req.user.createdItems
+//   })
+// })
 
 module.exports = router;
