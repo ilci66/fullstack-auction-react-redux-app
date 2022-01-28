@@ -43,18 +43,18 @@ const initialState = {
 const rootReducer = (state = initialState, action)=> {
   switch(action.type){
     case MAKE_REQUEST:
-      makeRequest()
-      break;
+      // makeRequest()
+    break;
     case TURN_ON_LOADING:
       return {...state,
         loading: true,
       }
-      break;
+      // break;
     case TURN_OFF_LOADING:
       return {...state,
         loading: false,
       }
-      break;
+      // break;
     case GET_USER_INFO:
         return Object.assign({}, state, 
           { userInfo: {
@@ -64,30 +64,30 @@ const rootReducer = (state = initialState, action)=> {
             }
           }
         )
-      break;
+      // break;
     case GET_USER_ITEMS:
       return {...state,
         userItems: action.payload
       }
-      break;
+      // break;
     case ADD_ALL_ITEMS:
       return {...state,
         allItems: action.payload
       }
-      break;
+      // break;
     case RE_RENDER_USER_ITEMS:
       return {...state,
         userItems: action.payload
       }
     case TURN_ON_EDIT:
-      return Object.assign({}, state, {isEdit: true})
+      Object.assign({}, state, {isEdit: true})
       break;
     case TURN_OFF_EDIT:
-      return Object.assign({}, state, {isEdit: false})
+      Object.assign({}, state, {isEdit: false})
       break;
     case ADD_ITEM_TO_EDIT:
       console.log("bids of chosen >>>", action.payload.bids)
-      return Object.assign({}, state, 
+      Object.assign({}, state, 
         { chosenItem: {
           //causing an error for now not touching image
           id: action.payload._id,
